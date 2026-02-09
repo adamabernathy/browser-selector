@@ -1,5 +1,6 @@
 import AppKit
 import CoreServices
+import Network
 import ServiceManagement
 
 final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDelegate {
@@ -12,8 +13,19 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     private var stageManagerToggleItem: NSMenuItem?
     private var showPowerTools = false
     private lazy var appIdentityIcon: NSImage = makeAppIdentityIcon()
+    private var internetInfo: InternetInfo?
+    private var internetInfoRequestInFlight = false
+    private var internetInfoLastRefresh: Date?
+    private var optionHiddenInternetInfoItems: [NSMenuItem] = []
+    private var systemVPNStatus: SystemVPNStatus = .unknown
+    private var systemVPNStatusRequestInFlight = false
+    private var systemVPNStatusLastRefresh: Date?
+    private var networkMonitor: NWPathMonitor?
+    private let networkMonitorQueue = DispatchQueue(label: "BrowserSwitchMenuBarApp.NetworkMonitor")
 
     private let preferredBrowserOrder = ["com.apple.Safari", "com.google.Chrome"]
+    private let internetInfoRefreshInterval: TimeInterval = 60
+    private let systemVPNStatusRefreshInterval: TimeInterval = 5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -29,6 +41,14 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         }
 
         statusItem.menu = buildMenu()
+        startNetworkMonitor()
+        refreshInternetInfoIfNeeded()
+        refreshSystemVPNStatusIfNeeded(force: true)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        networkMonitor?.cancel()
+        networkMonitor = nil
     }
 
     private func buildMenu() -> NSMenu {
@@ -41,6 +61,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     private func rebuildMenu(_ menu: NSMenu) {
         menu.removeAllItems()
         browserMenuItems.removeAll()
+        optionHiddenInternetInfoItems.removeAll()
 
         for bundleID in discoverInstalledBrowsers() {
             let item = NSMenuItem(
@@ -55,6 +76,8 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         }
 
         menu.addItem(.separator())
+
+        addInternetInfoItems(to: menu)
 
         let powerToolsSeparator = NSMenuItem.separator()
         menu.addItem(powerToolsSeparator)
@@ -304,6 +327,8 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         showPowerTools = NSEvent.modifierFlags.contains(.option)
         startOptionTrackingTimer()
         applyPowerToolsVisibility()
+        refreshInternetInfoIfNeeded()
+        refreshSystemVPNStatusIfNeeded(force: false)
         rebuildMenu(menu)
     }
 
@@ -349,6 +374,138 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         return NSWorkspace.shared
             .urlsForApplications(toOpen: url)
             .compactMap { Bundle(url: $0)?.bundleIdentifier }
+    }
+
+    private func addInternetInfoItems(to menu: NSMenu) {
+        if let vpnStatusItem = makeVPNStatusItem() {
+            menu.addItem(vpnStatusItem)
+        }
+
+        guard let internetInfo else { return }
+
+        for line in internetInfo.menuLines() {
+            let item = NSMenuItem(title: line.title, action: nil, keyEquivalent: "")
+            item.isEnabled = false
+            if line.isHiddenWithoutOptionKey {
+                optionHiddenInternetInfoItems.append(item)
+            }
+            menu.addItem(item)
+        }
+    }
+
+    private func makeVPNStatusItem() -> NSMenuItem? {
+        guard let resolvedVPNEnabled = systemVPNStatus.isConnected else { return nil }
+
+        let item = NSMenuItem(
+            title: resolvedVPNEnabled ? "VPN: On" : "VPN: Off",
+            action: nil,
+            keyEquivalent: "")
+        item.isEnabled = false
+
+        if resolvedVPNEnabled {
+            item.image = vpnConnectedImage()
+        }
+
+        return item
+    }
+
+    private func vpnConnectedImage() -> NSImage? {
+        guard let baseImage = NSImage(
+            systemSymbolName: "checkmark.circle.fill",
+            accessibilityDescription: "VPN enabled")
+        else {
+            return nil
+        }
+
+        baseImage.isTemplate = false
+
+        let config = NSImage.SymbolConfiguration(paletteColors: [.systemGreen])
+        let image = baseImage.withSymbolConfiguration(config) ?? baseImage
+        image.size = NSSize(width: 14, height: 14)
+        return image
+    }
+
+    private func refreshInternetInfoIfNeeded() {
+        if internetInfoRequestInFlight { return }
+
+        if let lastRefresh = internetInfoLastRefresh,
+           Date().timeIntervalSince(lastRefresh) < internetInfoRefreshInterval {
+            return
+        }
+
+        guard let url = URL(string: "https://wtfismyip.com/json") else { return }
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 3
+
+        internetInfoRequestInFlight = true
+
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            guard let self else { return }
+
+            let latestInfo: InternetInfo?
+            if let data, error == nil {
+                latestInfo = InternetInfoDecoder.decode(from: data)
+            } else {
+                latestInfo = nil
+            }
+
+            DispatchQueue.main.async {
+                self.internetInfoRequestInFlight = false
+                self.internetInfoLastRefresh = Date()
+
+                let didChange = self.internetInfo != latestInfo
+                self.internetInfo = latestInfo
+
+                if didChange, let menu = self.statusItem?.menu {
+                    self.rebuildMenu(menu)
+                }
+            }
+        }.resume()
+    }
+
+    private func startNetworkMonitor() {
+        let monitor = NWPathMonitor()
+        monitor.pathUpdateHandler = { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.refreshInternetInfoIfNeeded()
+                self.refreshSystemVPNStatusIfNeeded(force: false)
+            }
+        }
+        monitor.start(queue: networkMonitorQueue)
+        networkMonitor = monitor
+    }
+
+    private func refreshSystemVPNStatusIfNeeded(force: Bool) {
+        if systemVPNStatusRequestInFlight { return }
+
+        if
+            !force,
+            let lastRefresh = systemVPNStatusLastRefresh,
+            Date().timeIntervalSince(lastRefresh) < systemVPNStatusRefreshInterval
+        {
+            return
+        }
+
+        systemVPNStatusRequestInFlight = true
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+            let latestStatus = SystemVPNStatusDetector.detect()
+
+            DispatchQueue.main.async {
+                guard let self else { return }
+
+                self.systemVPNStatusRequestInFlight = false
+                self.systemVPNStatusLastRefresh = Date()
+
+                let didChange = self.systemVPNStatus != latestStatus
+                self.systemVPNStatus = latestStatus
+
+                if didChange, let menu = self.statusItem?.menu {
+                    self.rebuildMenu(menu)
+                }
+            }
+        }
     }
 
     private func makeAppIdentityIcon() -> NSImage {
@@ -403,6 +560,9 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         powerToolsSeparatorItem?.isHidden = hidden
         desktopIconsToggleItem?.isHidden = hidden
         stageManagerToggleItem?.isHidden = hidden
+        for item in optionHiddenInternetInfoItems {
+            item.isHidden = hidden
+        }
     }
 
     private func refreshPowerToolsState() {

@@ -10,7 +10,7 @@ Place a screenshot file at `docs/images/browser-switch-menu.png`, then update or
 
 ![Browser Switch menu screenshot](docs/images/screenshot-1.png)
 
-Recommended shot: the open menu showing browser options, current checkmark, and settings actions.
+Recommended shot: the open menu showing browser options, current checkmark, VPN/internet context rows, and settings actions.
 
 ## Why It’s Useful
 
@@ -26,6 +26,12 @@ Recommended shot: the open menu showing browser options, current checkmark, and 
 - Shows installed browsers dynamically (Safari/Chrome pinned first)
 - Checkmark indicates the browser currently set by macOS
 - De-duplicates duplicate browser entries by display name
+- Internet context section in the menu:
+  - VPN status from system network state (supports OpenConnect `utun` routes)
+  - Green check icon when VPN is connected
+  - ISP and location from `https://wtfismyip.com/json`
+  - IP and Tor-exit values hidden unless the `Option` key is held
+  - Network-change triggered refresh, throttled to at most once per minute
 - About panel with app identity and copyright
 - Settings menu:
   - Run on Startup
@@ -65,6 +71,61 @@ GitHub Actions workflows are included:
 
 - `CI`: runs tests and release build on pushes/PRs
 - `Package macOS App`: builds a downloadable `.app` zip artifact and publishes it on version tags (`v*`)
+
+## Release Signing Setup
+
+This project’s release workflow signs and notarizes the app before publishing.
+
+Required GitHub repository secrets:
+
+- `DEVELOPER_ID_APP_CERT_BASE64`
+- `DEVELOPER_ID_APP_CERT_PASSWORD`
+- `DEVELOPER_ID_APP_IDENTITY`
+- `APPLE_API_KEY_ID`
+- `APPLE_API_ISSUER_ID`
+- `APPLE_API_PRIVATE_KEY`
+
+How to get the Apple signing certificate:
+
+1. Join Apple Developer Program (paid account).
+2. Open [developer.apple.com/account](https://developer.apple.com/account) and create a `Developer ID Application` certificate.
+3. Use Keychain Access `Certificate Assistant > Request a Certificate From a Certificate Authority...` to generate a CSR if needed.
+4. Download and install the issued certificate into your login keychain.
+5. Export the certificate as a `.p12` file from Keychain Access.
+
+Create the certificate secrets:
+
+```bash
+# Base64-encode the p12 for GitHub secret DEVELOPER_ID_APP_CERT_BASE64
+base64 -i DeveloperIDApplication.p12 | pbcopy
+
+# Put your p12 export password in GitHub secret DEVELOPER_ID_APP_CERT_PASSWORD
+```
+
+Get the codesign identity string for `DEVELOPER_ID_APP_IDENTITY`:
+
+```bash
+security find-identity -v -p codesigning
+```
+
+Use the full identity text, for example:
+
+```text
+Developer ID Application: Adam Abernathy, LLC (TEAMID1234)
+```
+
+How to get notarization API key values:
+
+1. Open [appstoreconnect.apple.com](https://appstoreconnect.apple.com).
+2. Go to `Users and Access > Integrations > App Store Connect API`.
+3. Create an API key with access to notarization.
+4. Download the `.p8` key file once.
+5. Set:
+- `APPLE_API_KEY_ID`: Key ID from App Store Connect
+- `APPLE_API_ISSUER_ID`: Issuer ID from App Store Connect
+- `APPLE_API_PRIVATE_KEY`: full text contents of the `.p8` file
+
+After adding secrets, pushes to `main` and `v*` tags can produce signed + notarized releases.
 
 ## License
 

@@ -14,7 +14,8 @@ let package = Package(
             name: "BrowserSwitchMenuBarApp",
             linkerSettings: [
                 .linkedFramework("AppKit"),
-                .linkedFramework("CoreServices")
+                .linkedFramework("CoreServices"),
+                .linkedFramework("Network")
             ]
         ),
         .testTarget(
