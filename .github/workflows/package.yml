@@ -3,6 +3,8 @@ name: Package macOS App
 on:
   workflow_dispatch:
   push:
+    branches:
+      - "main"
     tags:
       - "v*"
 
@@ -99,8 +101,11 @@ jobs:
           if-no-files-found: error
 
       - name: Publish GitHub release asset
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref == 'refs/heads/main' && format('main-build-{0}', github.run_number) || github.ref_name }}
+          name: ${{ github.ref == 'refs/heads/main' && format('Main Build {0}', github.run_number) || github.ref_name }}
+          prerelease: ${{ github.ref == 'refs/heads/main' }}
           files: dist/BrowserSwitch-macOS.zip
           generate_release_notes: true
