@@ -6,8 +6,6 @@ If you regularly jump between Chrome, Safari, Arc, Firefox, or Edge for differen
 
 ## Screenshot
 
-Place a screenshot file at `docs/images/browser-switch-menu.png`, then update or keep this markdown:
-
 ![Browser Switch menu screenshot](docs/images/screenshot-1.png)
 
 Recommended shot: the open menu showing browser options, current checkmark, VPN/internet context rows, and settings actions.
