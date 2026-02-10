@@ -38,43 +38,55 @@ Recommended shot: the open menu showing browser options, current checkmark, VPN/
   - Scan for New Browsers
 - Quit action from menu
 
-## Requirements
+## Install
+
+Copy and paste this into Terminal:
+
+```bash
+git clone https://github.com/adamabernathy/browser-selector /tmp/browser-selector-install && /tmp/browser-selector-install/scripts/install.sh && rm -rf /tmp/browser-selector-install
+```
+
+This clones the repo, compiles a release build, copies the app to `~/Applications`, and removes the install files. Requires macOS 12+ and Xcode (or Command Line Tools with Swift 5.9+).
+
+To uninstall:
+
+```bash
+rm -rf ~/Applications/Browser\ Switch.app
+```
+
+## Development
+
+### Requirements
 
 - macOS 12+
-- Xcode / Apple Swift toolchain
+- Xcode or Apple Swift toolchain (Swift 5.9+)
 
-## Build and Run (Xcode)
+### Build and run from Xcode
 
-1. Open the package in Xcode:
-   - `File > Open...` and select this folder.
+1. `File > Open...` and select this folder.
 2. Select the `BrowserSwitchMenuBarApp` scheme.
 3. Build and run.
 
-## Build and Run (Terminal)
+### Build and run from Terminal
 
-Use this for development logs/debugging. This mode is attached to your terminal session:
+Useful for development logs and debugging. The process is attached to your terminal session:
 
 ```bash
-cd /Users/adamabernathy/dev/browserSwtich
 swift build
 swift run
 ```
 
-## Build and Run as a macOS App (No Terminal Window)
-
-Build a local `.app` bundle and launch it directly:
+### Build a standalone .app bundle
 
 ```bash
-cd /Users/adamabernathy/dev/browserSwtich
-./scripts/build-app.sh --run
+./scripts/build-app.sh --release --run
 ```
 
-This creates `dist/Browser Switch.app`. You can double-click that app in Finder without needing a terminal window.
+This creates `dist/Browser Switch.app` and opens it. You can also double-click the app from Finder.
 
-## Run Tests
+### Run tests
 
 ```bash
-cd /Users/adamabernathy/dev/browserSwtich
 swift test
 ```
 
