@@ -4,7 +4,7 @@
 #
 # One-liner install (copy and paste into Terminal):
 #
-#   git clone https://github.com/adamabernathy/browser-selector /tmp/browser-selector-install && /tmp/browser-selector-install/scripts/install.sh && rm -rf /tmp/browser-selector-install
+#   rm -rf /tmp/browser-selector-install && git clone https://github.com/adamabernathy/browser-selector /tmp/browser-selector-install && /tmp/browser-selector-install/scripts/install.sh && rm -rf /tmp/browser-selector-install
 #
 # Requirements: Xcode or Xcode Command Line Tools with Swift 5.9+
 
