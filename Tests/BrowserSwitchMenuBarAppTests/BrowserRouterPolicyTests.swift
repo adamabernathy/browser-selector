@@ -3,123 +3,148 @@ import XCTest
 
 final class BrowserRouterPolicyTests: XCTestCase {
 
-    // MARK: - docs.new shortcut
+    // MARK: - Helpers
 
-    func testDocsNewHostMatches() {
-        let url = URL(string: "https://docs.new")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    private func target(_ urlString: String, routes: [BrowserRoute] = RouteStore.defaultRoutes) -> String? {
+        guard let url = URL(string: urlString) else { return nil }
+        return BrowserRouterPolicy.targetBundleID(for: url, routes: routes)
     }
 
-    func testDocsNewSubdomainMatches() {
-        let url = URL(string: "https://foo.docs.new/path")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    private let chrome = RouteStore.chromeBundleID
+
+    // MARK: - Built-in Google Workspace routes
+
+    func testGoogleDocsMatchesChrome() {
+        XCTAssertEqual(target("https://docs.google.com/document/d/abc123/edit"), chrome)
     }
 
-    // MARK: - New-document shortcuts
-
-    func testSheetsNewMatches() {
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(URL(string: "https://sheets.new")!))
+    func testGoogleSheetsMatchesChrome() {
+        XCTAssertEqual(target("https://sheets.google.com/spreadsheets/d/abc123/edit"), chrome)
     }
 
-    func testSlidesNewMatches() {
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(URL(string: "https://slides.new")!))
+    func testGoogleSlidesMatchesChrome() {
+        XCTAssertEqual(target("https://slides.google.com/presentation/d/abc123/edit"), chrome)
     }
 
-    func testFormsNewMatches() {
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(URL(string: "https://forms.new")!))
+    func testGoogleDriveMatchesChrome() {
+        XCTAssertEqual(target("https://drive.google.com/drive/my-drive"), chrome)
     }
 
-    // MARK: - Google Workspace apps
-
-    func testGoogleDocsMatches() {
-        let url = URL(string: "https://docs.google.com/document/d/abc123/edit")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGmailMatchesChrome() {
+        XCTAssertEqual(target("https://mail.google.com/mail/u/0/"), chrome)
     }
 
-    func testGoogleSheetsMatches() {
-        let url = URL(string: "https://sheets.google.com/spreadsheets/d/abc123/edit")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleCalendarMatchesChrome() {
+        XCTAssertEqual(target("https://calendar.google.com/calendar/r"), chrome)
     }
 
-    func testGoogleSlidesMatches() {
-        let url = URL(string: "https://slides.google.com/presentation/d/abc123/edit")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleMeetMatchesChrome() {
+        XCTAssertEqual(target("https://meet.google.com/abc-defg-hij"), chrome)
     }
 
-    func testGoogleDriveMatches() {
-        let url = URL(string: "https://drive.google.com/drive/my-drive")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleChatMatchesChrome() {
+        XCTAssertEqual(target("https://chat.google.com/room/abc123"), chrome)
     }
 
-    func testGmailMatches() {
-        let url = URL(string: "https://mail.google.com/mail/u/0/")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleKeepMatchesChrome() {
+        XCTAssertEqual(target("https://keep.google.com/"), chrome)
     }
 
-    func testGoogleCalendarMatches() {
-        let url = URL(string: "https://calendar.google.com/calendar/r")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleFormsMatchesChrome() {
+        XCTAssertEqual(target("https://forms.google.com/forms/d/abc123/edit"), chrome)
     }
 
-    func testGoogleMeetMatches() {
-        let url = URL(string: "https://meet.google.com/abc-defg-hij")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleAdminMatchesChrome() {
+        XCTAssertEqual(target("https://admin.google.com/ac/home"), chrome)
     }
 
-    func testGoogleChatMatches() {
-        let url = URL(string: "https://chat.google.com/room/abc123")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleWorkspaceMatchesChrome() {
+        XCTAssertEqual(target("https://workspace.google.com/dashboard"), chrome)
     }
 
-    func testJamboardMatches() {
-        let url = URL(string: "https://jamboard.google.com/d/abc123/viewer")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testDocsNewMatchesChrome() {
+        XCTAssertEqual(target("https://docs.new"), chrome)
     }
 
-    func testGoogleSitesMatches() {
-        let url = URL(string: "https://sites.google.com/view/mysite")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testSheetsNewMatchesChrome() {
+        XCTAssertEqual(target("https://sheets.new"), chrome)
     }
 
-    func testGoogleKeepMatches() {
-        let url = URL(string: "https://keep.google.com/")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testSlidesNewMatchesChrome() {
+        XCTAssertEqual(target("https://slides.new"), chrome)
     }
 
-    func testGoogleFormsMatches() {
-        let url = URL(string: "https://forms.google.com/forms/d/abc123/edit")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testFormsNewMatchesChrome() {
+        XCTAssertEqual(target("https://forms.new"), chrome)
     }
 
-    func testGoogleAdminMatches() {
-        let url = URL(string: "https://admin.google.com/ac/home")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGeminiMatchesChrome() {
+        XCTAssertEqual(target("https://gemini.google.com/app"), chrome)
     }
 
-    func testGoogleWorkspaceMatches() {
-        let url = URL(string: "https://workspace.google.com/dashboard")!
-        XCTAssertTrue(BrowserRouterPolicy.shouldOpenInChrome(url))
+    // MARK: - Non-matching hosts return nil
+
+    func testGoogleSearchReturnsNil() {
+        XCTAssertNil(target("https://www.google.com/search?q=test"))
     }
 
-    // MARK: - Non-matching hosts
-
-    func testGoogleSearchDoesNotMatch() {
-        let url = URL(string: "https://www.google.com/search?q=test")!
-        XCTAssertFalse(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testGoogleComReturnsNil() {
+        XCTAssertNil(target("https://google.com"))
     }
 
-    func testGoogleComDoesNotMatch() {
-        let url = URL(string: "https://google.com")!
-        XCTAssertFalse(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testArbitraryHostReturnsNil() {
+        XCTAssertNil(target("https://example.com"))
     }
 
-    func testNonGoogleHostDoesNotMatch() {
-        let url = URL(string: "https://example.com")!
-        XCTAssertFalse(BrowserRouterPolicy.shouldOpenInChrome(url))
+    func testEmptyHostReturnsNil() {
+        XCTAssertNil(target("https://"))
     }
 
-    func testEmptyHostDoesNotMatch() {
-        let url = URL(string: "https://")!
-        XCTAssertFalse(BrowserRouterPolicy.shouldOpenInChrome(url))
+    // MARK: - Wildcard patterns
+
+    func testWildcardMatchesSubdomain() {
+        let routes = [BrowserRoute(pattern: "*.work.com", browserBundleID: "com.apple.Safari")]
+        XCTAssertEqual(target("https://app.work.com", routes: routes), "com.apple.Safari")
+    }
+
+    func testWildcardMatchesRootDomain() {
+        let routes = [BrowserRoute(pattern: "*.work.com", browserBundleID: "com.apple.Safari")]
+        XCTAssertEqual(target("https://work.com", routes: routes), "com.apple.Safari")
+    }
+
+    func testWildcardDoesNotMatchUnrelatedDomain() {
+        let routes = [BrowserRoute(pattern: "*.work.com", browserBundleID: "com.apple.Safari")]
+        XCTAssertNil(target("https://notwork.com", routes: routes))
+    }
+
+    // MARK: - Path patterns
+
+    func testPathPatternMatchesPrefix() {
+        let routes = [BrowserRoute(pattern: "example.com/app", browserBundleID: "com.apple.Safari")]
+        XCTAssertEqual(target("https://example.com/app/dashboard", routes: routes), "com.apple.Safari")
+    }
+
+    func testPathPatternDoesNotMatchDifferentPath() {
+        let routes = [BrowserRoute(pattern: "example.com/app", browserBundleID: "com.apple.Safari")]
+        XCTAssertNil(target("https://example.com/other", routes: routes))
+    }
+
+    // MARK: - Disabled routes
+
+    func testDisabledRouteIsSkipped() {
+        let routes = [BrowserRoute(pattern: "docs.google.com", browserBundleID: chrome, isEnabled: false)]
+        XCTAssertNil(target("https://docs.google.com/document/d/abc", routes: routes))
+    }
+
+    func testEnabledRouteIsMatched() {
+        let routes = [BrowserRoute(pattern: "docs.google.com", browserBundleID: chrome, isEnabled: true)]
+        XCTAssertEqual(target("https://docs.google.com/document/d/abc", routes: routes), chrome)
+    }
+
+    // MARK: - Empty pattern
+
+    func testEmptyPatternDoesNotMatch() {
+        let routes = [BrowserRoute(pattern: "", browserBundleID: chrome)]
+        XCTAssertNil(target("https://example.com", routes: routes))
     }
 }

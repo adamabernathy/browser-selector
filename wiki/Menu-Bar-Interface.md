@@ -12,28 +12,32 @@ Clicking the icon opens the main menu. The menu is rebuilt from scratch every ti
 
 From top to bottom:
 
-1. **Browser list** -- every installed browser that handles both `http` and `https`. Safari and Chrome are pinned to the top; remaining browsers are sorted alphabetically. A checkmark indicates the current macOS default. Clicking a browser sets it as the default for both schemes immediately.
+1. **Browser Router** — enables or disables the URL routing helper. When active, shows a checkmark and a filled icon. See [Browser Router](Browser-Router).
 
-2. **Separator**
+2. **Browser list** — every installed browser that handles both `http` and `https`. Safari and Chrome are pinned to the top; remaining browsers are sorted alphabetically. A checkmark indicates the current macOS default. Clicking a browser sets it as the default for both schemes immediately. When Browser Router is active, clicking a browser sets it as the router's fallback target without disabling routing.
 
-3. **Caffeine** -- prevents the display from sleeping. When active, the icon changes to a steaming cup with a green dot. Uses an `IOPMAssertion` of type `PreventUserIdleDisplaySleep`. The assertion is released on quit or when toggled off.
+3. **Separator**
 
-4. **Toggle Desktop Icons** -- shows or hides Finder desktop icons by writing `CreateDesktop` to `com.apple.finder` preferences and restarting Finder.
+4. **Caffeine** — prevents the display from sleeping. When active, the icon changes to a steaming cup with a green dot. Uses an `IOPMAssertion` of type `PreventUserIdleDisplaySleep`. The assertion is released on quit or when toggled off.
 
-5. **Separator**
+5. **Toggle Desktop Icons** — shows or hides Finder desktop icons by writing `CreateDesktop` to `com.apple.finder` preferences and restarting Finder.
 
-6. **Network info** -- VPN status, ISP, and location are shown as disabled (non-clickable) menu items. IP address and Tor exit status are hidden by default and revealed by holding Option. See [Network and VPN Context](Network-and-VPN-Context) and [Option-Key Power Tools](Option-Key-Power-Tools).
+6. **Separator**
 
-7. **Toggle Stage Manager** -- hidden by default, revealed by holding Option. See [Option-Key Power Tools](Option-Key-Power-Tools).
+7. **Network info** — VPN status, ISP, and location are shown as disabled (non-clickable) menu items. IP address and Tor exit status are hidden by default and revealed by holding Option. See [Network and VPN Context](Network-and-VPN-Context) and [Option-Key Power Tools](Option-Key-Power-Tools).
 
-8. **Separator**
+8. **Toggle Stage Manager** — hidden by default, revealed by holding Option. See [Option-Key Power Tools](Option-Key-Power-Tools).
 
-9. **Settings** -- a submenu containing Run on Startup and Scan for New Browsers. See [Settings](Settings).
+9. **Separator**
 
-10. **Separator**
+10. **Scan for New Browsers** — re-queries macOS for all installed browsers and rebuilds the menu.
 
-11. **About** -- opens the standard macOS About panel with the app identity icon, version, build number, and copyright.
+11. **Settings...** (`Cmd+,`) — opens the Settings modal with General and Browser Router tabs. See [Settings](Settings).
 
 12. **Separator**
 
-13. **Quit** (`Cmd+Q`) -- terminates the app, releasing any power assertions and cancelling network monitors.
+13. **About** — opens the standard macOS About panel with the app identity icon, version, build number, and copyright.
+
+14. **Separator**
+
+15. **Quit** (`Cmd+Q`) — terminates the app, releasing any power assertions and cancelling network monitors. If Browser Router is active, the router process is terminated automatically on quit.

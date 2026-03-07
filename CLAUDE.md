@@ -71,7 +71,7 @@ This app must feel native — match system menu bar extras (Wi-Fi, Battery, Blue
 
 ### Issues Workflow
 
-1. **Branch** from `main` as `Issue-N` (e.g., `git checkout -b Issue-42`).
+1. **Branch** from `main` as `issue-N` (e.g., `git checkout -b issue-42`).
 2. **Work** on that branch.
 3. **Close** the issue by adding `Closes #N` at the bottom of every related commit message:
 
@@ -80,6 +80,7 @@ This app must feel native — match system menu bar extras (Wi-Fi, Battery, Blue
 
    Closes #42
    ```
+4. Never tag AI as a co-author.
 
 ## Markdown
 
@@ -102,28 +103,3 @@ This app must feel native — match system menu bar extras (Wi-Fi, Battery, Blue
 
 > [!CAUTION]
 > Negative potential consequences of an action.
-
-## GitHub Issues Workflow
-
-When working on a GitHub issue:
-
-1. **Create a branch** named `Issue-N` where `N` is the issue number before starting any work.
-
-   ```sh
-   git checkout -b Issue-N
-   ```
-
-2. **Work on the issue** on that branch.
-
-3. **Tag the issue** at the bottom of every commit message related to the issue:
-
-   ```sh
-   Closes #N
-   ```
-
-   Example commit message:
-
-   ```sh
-   Fix license expiration validation logic
-
-   Closes #42

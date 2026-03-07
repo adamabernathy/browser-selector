@@ -2,7 +2,6 @@ import AppKit
 import CoreServices
 import BrowserSwitchCore
 
-private let chromeBundleID = "com.google.Chrome"
 private let mainAppBundleID = "com.adamabernathy.browserswitch"
 private let selectedDefaultBrowserBundleIDKey = "browserRouter.selectedDefaultBrowserBundleID"
 private let routerLogPath = "/tmp/browser-switch-router.log"
@@ -83,27 +82,26 @@ private func openURL(_ url: URL, inBrowserWithBundleID bundleIdentifier: String)
 private func routeURL(_ url: URL) {
     guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else { return }
 
+    RouteStore.shared.reload()
+    let routes = RouteStore.shared.routes
     let fallbackBundleID = resolvedFallbackBundleID()
-    let targetBundleID: String
 
-    if BrowserRouterPolicy.shouldOpenInChrome(url) {
-        if applicationURL(forBundleIdentifier: chromeBundleID) != nil {
-            targetBundleID = chromeBundleID
+    if let targetID = BrowserRouterPolicy.targetBundleID(for: url, routes: routes) {
+        if applicationURL(forBundleIdentifier: targetID) != nil {
+            logRouter("route url=\(url.absoluteString) target=\(targetID) fallback=\(fallbackBundleID ?? "-")")
+            openURL(url, inBrowserWithBundleID: targetID)
         } else if let fallback = fallbackBundleID {
-            targetBundleID = fallback
+            logRouter("route url=\(url.absoluteString) target_missing=\(targetID) fallback=\(fallback)")
+            openURL(url, inBrowserWithBundleID: fallback)
         } else {
-            logRouter("route drop url=\(url.absoluteString) reason=no_chrome_no_fallback")
-            return
+            logRouter("route drop url=\(url.absoluteString) reason=no_target_no_fallback")
         }
     } else if let fallback = fallbackBundleID {
-        targetBundleID = fallback
+        logRouter("route url=\(url.absoluteString) target=\(fallback) fallback=\(fallback)")
+        openURL(url, inBrowserWithBundleID: fallback)
     } else {
         logRouter("route drop url=\(url.absoluteString) reason=no_fallback")
-        return
     }
-
-    logRouter("route url=\(url.absoluteString) target=\(targetBundleID) fallback=\(fallbackBundleID ?? "-")")
-    openURL(url, inBrowserWithBundleID: targetBundleID)
 }
 
 private func logRouter(_ message: String) {

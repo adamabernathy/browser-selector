@@ -1,42 +1,46 @@
 import Foundation
 
 public enum BrowserRouterPolicy {
-    /// Hosts whose URLs should always open in Chrome when Browser Router is enabled.
-    /// Includes Google Workspace collaboration and productivity apps.
-    private static let chromeHosts: Set<String> = [
-        // Google Workspace apps
-        "docs.google.com",
-        "sheets.google.com",
-        "slides.google.com",
-        "drive.google.com",
-        "mail.google.com",
-        "calendar.google.com",
-        "meet.google.com",
-        "chat.google.com",
-        "jamboard.google.com",
-        "sites.google.com",
-        "keep.google.com",
-        "forms.google.com",
-        "admin.google.com",
-        "workspace.google.com",
-        // New-document shortcuts
-        "docs.new",
-        "sheets.new",
-        "slides.new",
-        "forms.new",
-    ]
+    /// Returns the bundle ID of the browser that should handle the given URL,
+    /// based on the provided route list. Returns nil if no route matches.
+    public static func targetBundleID(for url: URL, routes: [BrowserRoute]) -> String? {
+        guard let host = url.host?.lowercased(), !host.isEmpty else { return nil }
+        let path = url.path.lowercased()
 
-    public static func shouldOpenInChrome(_ url: URL) -> Bool {
-        guard let host = url.host?.lowercased(), !host.isEmpty else {
-            return false
-        }
-
-        for chromeHost in chromeHosts {
-            if host == chromeHost || host.hasSuffix(".\(chromeHost)") {
-                return true
+        for route in routes where route.isEnabled {
+            if patternMatches(host: host, path: path, pattern: route.pattern.lowercased()) {
+                return route.browserBundleID
             }
         }
+        return nil
+    }
 
-        return false
+    // MARK: - Pattern matching
+
+    private static func patternMatches(host: String, path: String, pattern: String) -> Bool {
+        guard !pattern.isEmpty else { return false }
+
+        let patternHost: String
+        let patternPath: String?
+
+        if let slashIdx = pattern.firstIndex(of: "/") {
+            patternHost = String(pattern[..<slashIdx])
+            patternPath = String(pattern[slashIdx...])
+        } else {
+            patternHost = pattern
+            patternPath = nil
+        }
+
+        guard hostMatches(host, patternHost: patternHost) else { return false }
+        if let patternPath { return path.hasPrefix(patternPath) }
+        return true
+    }
+
+    private static func hostMatches(_ host: String, patternHost: String) -> Bool {
+        if patternHost.hasPrefix("*.") {
+            let suffix = String(patternHost.dropFirst(2))
+            return host == suffix || host.hasSuffix(".\(suffix)")
+        }
+        return host == patternHost
     }
 }
