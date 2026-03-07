@@ -1,5 +1,5 @@
 import XCTest
-@testable import BrowserSwitchMenuBarApp
+@testable import BrowserSwitchCore
 
 final class BrowserDiscoveryTests: XCTestCase {
     private let home = "/Users/tester"

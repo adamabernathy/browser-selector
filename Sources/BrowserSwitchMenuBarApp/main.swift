@@ -1,4 +1,5 @@
 import AppKit
+import BrowserSwitchCore
 import CoreServices
 import IOKit.pwr_mgt
 import Network
@@ -27,6 +28,13 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     private var networkMonitor: NWPathMonitor?
     private let networkMonitorQueue = DispatchQueue(label: "BrowserSwitchMenuBarApp.NetworkMonitor")
     private var appearanceObservation: NSKeyValueObservation?
+    private let safariBundleID = "com.apple.Safari"
+    private let routerBundleIdentifier = "com.adamabernathy.browserswitch.router"
+    private let selectedDefaultBrowserBundleIDKey = "browserRouter.selectedDefaultBrowserBundleID"
+    private let routerMenuOptionIdentifier = "__browser_router_option__"
+    private let launchServicesPermissionError: OSStatus = -54
+    private let defaultBrowserSetRetryDelay: TimeInterval = 0.8
+    private let preferencesAppID = "com.adamabernathy.browserswitch" as CFString
 
     private var menuBarSymbolName: String {
         if #available(macOS 26, *) {
@@ -61,6 +69,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         }
 
         statusItem.menu = buildMenu()
+        repairRouterFallbackIfNeeded()
         startNetworkMonitor()
         refreshInternetInfoIfNeeded()
         refreshSystemVPNStatusIfNeeded(force: true)
@@ -84,6 +93,16 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         menu.removeAllItems()
         browserMenuItems.removeAll()
         optionHiddenInternetInfoItems.removeAll()
+
+        let routerItem = NSMenuItem(
+            title: "Browser Router",
+            action: #selector(selectBrowser(_:)),
+            keyEquivalent: "")
+        routerItem.target = self
+        routerItem.image = browserRouterIcon(isEnabled: isBrowserRouterEnabled())
+        routerItem.representedObject = routerMenuOptionIdentifier
+        menu.addItem(routerItem)
+        browserMenuItems[routerMenuOptionIdentifier] = routerItem
 
         for bundleID in discoverInstalledBrowsers() {
             let item = NSMenuItem(
@@ -174,7 +193,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     }
 
     private func appIcon(bundleIdentifier: String) -> NSImage? {
-        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+        guard let appURL = applicationURL(forBundleIdentifier: bundleIdentifier) else {
             return nil
         }
 
@@ -183,9 +202,26 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         return icon
     }
 
+    private func browserRouterIcon(isEnabled: Bool) -> NSImage? {
+        let symbolNames = isEnabled
+            ? ["signpost.right.and.left.fill", "signpost.right.and.left"]
+            : ["signpost.right.and.left", "signpost.right.and.left.fill"]
+
+        for symbolName in symbolNames {
+            guard let icon = NSImage(systemSymbolName: symbolName, accessibilityDescription: "Browser Router") else {
+                continue
+            }
+            icon.size = NSSize(width: 16, height: 16)
+            icon.isTemplate = true
+            return icon
+        }
+
+        return nil
+    }
+
     private func appDisplayName(bundleIdentifier: String) -> String {
         guard
-            let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier),
+            let appURL = applicationURL(forBundleIdentifier: bundleIdentifier),
             let bundle = Bundle(url: appURL)
         else {
             return bundleIdentifier
@@ -205,16 +241,136 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     @objc
     private func selectBrowser(_ sender: NSMenuItem) {
         guard let bundleIdentifier = sender.representedObject as? String else { return }
+        if bundleIdentifier == routerMenuOptionIdentifier {
+            toggleBrowserRouter()
+            return
+        }
+        selectDefaultBrowser(bundleIdentifier: bundleIdentifier)
+    }
+
+    private func toggleBrowserRouter() {
+        if isBrowserRouterEnabled() {
+            if let selectedDefaultBrowser = resolvedSelectedDefaultBrowserBundleID() {
+                terminateRouterIfRunning()
+                setDefaultBrowser(bundleIdentifier: selectedDefaultBrowser)
+            }
+            return
+        }
+
+        enableBrowserRouter()
+    }
+
+    private func terminateRouterIfRunning() {
+        NSRunningApplication
+            .runningApplications(withBundleIdentifier: routerBundleIdentifier)
+            .forEach { $0.terminate() }
+    }
+
+    private func launchRouterHelperIfNeeded(completion: @escaping () -> Void) {
+        guard let resourceURL = Bundle.main.resourceURL else {
+            showAlert(
+                title: "Browser Router Unavailable",
+                message: "Run ./scripts/build-app.sh to build the full app bundle required for Browser Router.")
+            return
+        }
+        let routerAppURL = resourceURL.appendingPathComponent("BrowserSwitchRouter.app")
+        guard FileManager.default.fileExists(atPath: routerAppURL.path) else {
+            showAlert(
+                title: "Browser Router Unavailable",
+                message: "BrowserSwitchRouter.app was not found. Run ./scripts/build-app.sh to build the full app bundle.")
+            return
+        }
+
+        let alreadyRunning = NSRunningApplication
+            .runningApplications(withBundleIdentifier: routerBundleIdentifier)
+            .contains { !$0.isTerminated }
+        if alreadyRunning {
+            completion()
+            return
+        }
+
+        let config = NSWorkspace.OpenConfiguration()
+        config.activates = false
+        NSWorkspace.shared.openApplication(at: routerAppURL, configuration: config) { [weak self] _, error in
+            DispatchQueue.main.async {
+                if let error {
+                    self?.showAlert(
+                        title: "Could Not Start Browser Router",
+                        message: error.localizedDescription)
+                } else {
+                    completion()
+                }
+            }
+        }
+    }
+
+    private func enableBrowserRouter() {
+        let fallback = resolvedSelectedDefaultBrowserBundleID()
+        debugLog("enableBrowserRouter fallback=\(fallback ?? "nil")")
+        if let fallback {
+            persistSelectedDefaultBrowserBundleID(fallback)
+        }
+        launchRouterHelperIfNeeded { [weak self] in
+            guard let self else { return }
+            self.setDefaultBrowser(bundleIdentifier: self.routerBundleIdentifier)
+        }
+    }
+
+    private func selectDefaultBrowser(bundleIdentifier: String) {
+        persistSelectedDefaultBrowserBundleID(bundleIdentifier)
+        if isBrowserRouterEnabled() {
+            refreshBrowserState()
+            return
+        }
         setDefaultBrowser(bundleIdentifier: bundleIdentifier)
     }
 
     private func setDefaultBrowser(bundleIdentifier: String) {
-        let schemes = ["http", "https"]
+        applyDefaultBrowserHandlers(
+            bundleIdentifier: bundleIdentifier,
+            schemes: ["http", "https"],
+            retryCount: 10)
+    }
+
+    private func applyDefaultBrowserHandlers(bundleIdentifier: String, schemes: [String], retryCount: Int) {
+        var failedStatuses: [(scheme: String, status: OSStatus)] = []
 
         for scheme in schemes {
-            LSSetDefaultHandlerForURLScheme(scheme as CFString, bundleIdentifier as CFString)
+            let status = LSSetDefaultHandlerForURLScheme(scheme as CFString, bundleIdentifier as CFString)
+            if status != noErr {
+                failedStatuses.append((scheme: scheme, status: status))
+            }
         }
 
+        if failedStatuses.isEmpty {
+            refreshBrowserState()
+            return
+        }
+
+        let retryableFailures = failedStatuses.filter { $0.status == launchServicesPermissionError }
+        if !retryableFailures.isEmpty && retryCount > 0 {
+            let retrySchemes = retryableFailures.map(\.scheme)
+            DispatchQueue.main.asyncAfter(deadline: .now() + defaultBrowserSetRetryDelay) { [weak self] in
+                self?.applyDefaultBrowserHandlers(
+                    bundleIdentifier: bundleIdentifier,
+                    schemes: retrySchemes,
+                    retryCount: retryCount - 1)
+            }
+            refreshBrowserState()
+            return
+        }
+
+        if failedStatuses.allSatisfy({ $0.status == launchServicesPermissionError }) {
+            refreshBrowserState()
+            return
+        }
+
+        let details = failedStatuses
+            .map { "\($0.scheme): \($0.status)" }
+            .joined(separator: ", ")
+        showAlert(
+            title: "Could Not Set Default Browser",
+            message: "Launch Services rejected the default browser update (\(details)).")
         refreshBrowserState()
     }
 
@@ -390,9 +546,17 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     }
 
     private func refreshBrowserState() {
-        let current = currentDefaultBrowserBundleID()
+        let routerEnabled = isBrowserRouterEnabled()
+        let selectedDefaultBrowser = resolvedSelectedDefaultBrowserBundleID()
+
         for (bundleID, item) in browserMenuItems {
-            item.state = bundleID == current ? .on : .off
+            if bundleID == routerMenuOptionIdentifier {
+                item.state = routerEnabled ? .on : .off
+                item.image = browserRouterIcon(isEnabled: routerEnabled)
+                continue
+            }
+
+            item.state = bundleID == selectedDefaultBrowser ? .on : .off
         }
     }
 
@@ -416,21 +580,92 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         }
     }
 
-    private func currentDefaultBrowserBundleID() -> String? {
-        if
-            let httpsURL = URL(string: "https://example.com"),
-            let appURL = NSWorkspace.shared.urlForApplication(toOpen: httpsURL),
-            let bundleID = Bundle(url: appURL)?.bundleIdentifier
-        {
+    private func currentDefaultBrowserBundleID(excluding excludedBundleIDs: Set<String> = []) -> String? {
+        for scheme in ["https", "http"] {
+            guard
+                let url = URL(string: "\(scheme)://example.com"),
+                let appURL = NSWorkspace.shared.urlForApplication(toOpen: url),
+                let bundleID = Bundle(url: appURL)?.bundleIdentifier,
+                !excludedBundleIDs.contains(bundleID)
+            else {
+                continue
+            }
             return bundleID
         }
 
+        if !excludedBundleIDs.isEmpty {
+            for scheme in ["https", "http"] {
+                guard let url = URL(string: "\(scheme)://example.com") else { continue }
+                for appURL in NSWorkspace.shared.urlsForApplications(toOpen: url) {
+                    guard let bundleID = Bundle(url: appURL)?.bundleIdentifier else { continue }
+                    if excludedBundleIDs.contains(bundleID) { continue }
+                    return bundleID
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private func repairRouterFallbackIfNeeded() {
+        guard isBrowserRouterEnabled() else { return }
+        let saved = CFPreferencesCopyAppValue(selectedDefaultBrowserBundleIDKey as CFString, preferencesAppID) as? String
+        guard saved == nil || saved == routerBundleIdentifier else { return }
+        if let fallback = currentDefaultBrowserBundleID(excluding: [routerBundleIdentifier]) {
+            persistSelectedDefaultBrowserBundleID(fallback)
+            debugLog("repairRouterFallback saved fallback=\(fallback)")
+        }
+    }
+
+    private func isBrowserRouterEnabled() -> Bool {
+        return currentDefaultBrowserBundleID() == routerBundleIdentifier
+    }
+
+    private func persistSelectedDefaultBrowserBundleID(_ bundleIdentifier: String) {
+        let appURL = applicationURL(forBundleIdentifier: bundleIdentifier)
+        debugLog("persist bundleID=\(bundleIdentifier) appURL=\(appURL?.path ?? "nil")")
+        guard
+            !bundleIdentifier.isEmpty,
+            bundleIdentifier != routerBundleIdentifier,
+            appURL != nil
+        else {
+            debugLog("persist REJECTED")
+            return
+        }
+        CFPreferencesSetAppValue(selectedDefaultBrowserBundleIDKey as CFString, bundleIdentifier as CFString, preferencesAppID)
+        CFPreferencesAppSynchronize(preferencesAppID)
+        debugLog("persist WROTE \(bundleIdentifier)")
+    }
+
+    private func debugLog(_ message: String) {
+        let logPath = "/tmp/browser-switch-router.log"
+        let line = "[MAIN \(ISO8601DateFormatter().string(from: Date()))] \(message)\n"
+        guard let data = line.data(using: .utf8) else { return }
+        let url = URL(fileURLWithPath: logPath)
+        if FileManager.default.fileExists(atPath: logPath),
+           let handle = try? FileHandle(forWritingTo: url) {
+            defer { try? handle.close() }
+            _ = try? handle.seekToEnd()
+            try? handle.write(contentsOf: data)
+        } else {
+            try? data.write(to: url)
+        }
+    }
+
+    private func resolvedSelectedDefaultBrowserBundleID() -> String? {
         if
-            let httpURL = URL(string: "http://example.com"),
-            let appURL = NSWorkspace.shared.urlForApplication(toOpen: httpURL),
-            let bundleID = Bundle(url: appURL)?.bundleIdentifier
+            let savedBundleID = CFPreferencesCopyAppValue(selectedDefaultBrowserBundleIDKey as CFString, preferencesAppID) as? String,
+            savedBundleID != routerBundleIdentifier,
+            applicationURL(forBundleIdentifier: savedBundleID) != nil
         {
-            return bundleID
+            return savedBundleID
+        }
+
+        if let liveFallback = currentDefaultBrowserBundleID(excluding: [routerBundleIdentifier]) {
+            return liveFallback
+        }
+        if applicationURL(forBundleIdentifier: safariBundleID) != nil {
+            return safariBundleID
         }
 
         return nil
@@ -458,8 +693,8 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
 
         let candidateBundleIDs = httpHandlers
             .intersection(httpsHandlers)
-            .filter { !$0.isEmpty && $0 != ownBundleID }
-            .filter { NSWorkspace.shared.urlForApplication(withBundleIdentifier: $0) != nil }
+            .filter { !$0.isEmpty && $0 != ownBundleID && $0 != routerBundleIdentifier }
+            .filter { applicationURL(forBundleIdentifier: $0) != nil }
 
         return BrowserDiscovery.orderedBundleIDs(
             preferredOrder: preferredBrowserOrder,
@@ -468,7 +703,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     }
 
     private func browserCandidate(bundleIdentifier: String) -> BrowserCandidateInfo? {
-        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+        guard let appURL = applicationURL(forBundleIdentifier: bundleIdentifier) else {
             return nil
         }
 
@@ -487,6 +722,24 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         return NSWorkspace.shared
             .urlsForApplications(toOpen: url)
             .compactMap { Bundle(url: $0)?.bundleIdentifier }
+    }
+
+    private func applicationURL(forBundleIdentifier bundleIdentifier: String) -> URL? {
+        if let direct = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) {
+            return direct
+        }
+
+        for urlString in ["https://example.com", "http://example.com"] {
+            guard let probeURL = URL(string: urlString) else { continue }
+            for candidate in NSWorkspace.shared.urlsForApplications(toOpen: probeURL) {
+                guard let candidateBundleID = Bundle(url: candidate)?.bundleIdentifier else { continue }
+                if candidateBundleID == bundleIdentifier {
+                    return candidate
+                }
+            }
+        }
+
+        return nil
     }
 
     private func addInternetInfoItems(to menu: NSMenu) {

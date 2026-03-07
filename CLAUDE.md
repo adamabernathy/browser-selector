@@ -7,7 +7,7 @@ Browser Switch is a macOS menu bar utility for changing the default browser in o
 ```bash
 swift build                            # Debug build
 swift test                             # Run all tests
-swift run                              # Build and launch
+swift run BrowserSwitchMenuBarApp      # Build and launch
 ./scripts/build-app.sh --release --run # Standalone .app in dist/
 ```
 

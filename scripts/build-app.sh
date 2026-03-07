@@ -4,10 +4,13 @@ set -euo pipefail
 APP_NAME="Browser Switch"
 PRODUCT_NAME="BrowserSwitchMenuBarApp"
 BUNDLE_ID="com.adamabernathy.browserswitch"
+ROUTER_PRODUCT_NAME="BrowserSwitchRouter"
+ROUTER_BUNDLE_ID="com.adamabernathy.browserswitch.router"
 BUILD_CONFIG="release"
 DIST_DIR="dist"
 APP_DIR="${DIST_DIR}/${APP_NAME}.app"
 EXECUTABLE_PATH="${APP_DIR}/Contents/MacOS/${APP_NAME}"
+ROUTER_APP_DIR="${APP_DIR}/Contents/Resources/BrowserSwitchRouter.app"
 RUN_AFTER_BUILD=0
 
 # Read version from VERSION file
@@ -66,6 +69,41 @@ mkdir -p "${APP_DIR}/Contents/Resources"
 
 cp ".build/${BUILD_CONFIG}/${PRODUCT_NAME}" "${EXECUTABLE_PATH}"
 chmod +x "${EXECUTABLE_PATH}"
+
+# Build and bundle the BrowserSwitchRouter helper app
+mkdir -p "${ROUTER_APP_DIR}/Contents/MacOS"
+cp ".build/${BUILD_CONFIG}/${ROUTER_PRODUCT_NAME}" \
+   "${ROUTER_APP_DIR}/Contents/MacOS/${ROUTER_PRODUCT_NAME}"
+chmod +x "${ROUTER_APP_DIR}/Contents/MacOS/${ROUTER_PRODUCT_NAME}"
+
+cat > "${ROUTER_APP_DIR}/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleExecutable</key>   <string>${ROUTER_PRODUCT_NAME}</string>
+  <key>CFBundleIdentifier</key>   <string>${ROUTER_BUNDLE_ID}</string>
+  <key>CFBundleName</key>         <string>${ROUTER_PRODUCT_NAME}</string>
+  <key>CFBundlePackageType</key>  <string>APPL</string>
+  <key>CFBundleShortVersionString</key> <string>${VERSION}</string>
+  <key>CFBundleVersion</key>      <string>${BUILD_VERSION}</string>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>     <string>Web URLs</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>http</string>
+        <string>https</string>
+      </array>
+    </dict>
+  </array>
+  <key>LSMinimumSystemVersion</key> <string>14.0</string>
+  <key>LSUIElement</key>            <true/>
+  <key>NSHighResolutionCapable</key> <true/>
+</dict>
+</plist>
+PLIST
 
 cat > "${APP_DIR}/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
