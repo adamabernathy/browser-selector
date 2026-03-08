@@ -1,10 +1,10 @@
-# Browser Flow — Brand Identity, Marketing Strategy & Website Plan
+# Browser Toast — Brand Identity, Marketing Strategy & Website Plan
 
 ## Brand Persona
 
-If Browser Flow were a person, it would be the senior engineer at the coffee shop who has strong opinions about tools but never brings them up unprompted. Calm. Competent. Minimal setup, maximum output. The kind of person who has three sentences where others need three paragraphs — and every sentence lands.
+If Browser Toast were a person, it would be the senior engineer at the coffee shop who has strong opinions about tools but never brings them up unprompted. Calm. Competent. Minimal setup, maximum output. The kind of person who has three sentences where others need three paragraphs — and every sentence lands.
 
-Browser Flow doesn't try to impress you. It just works, and you notice the absence of friction more than the presence of a product.
+Browser Toast doesn't try to impress you. It just works, and you notice the absence of friction more than the presence of a product. Warm, reliable, and ready exactly when you need it — like a perfect piece of toast.
 
 ### Character Traits
 
@@ -20,16 +20,17 @@ Browser Flow doesn't try to impress you. It just works, and you notice the absen
 
 **The Sage** meets **The Craftsman.**
 
-The Sage knows the right answer and delivers it without ego. The Craftsman obsesses over the quality of the work itself, not the recognition. Browser Flow combines both: it knows exactly what you need (your default browser changed, now) and delivers it with invisible precision.
+The Sage knows the right answer and delivers it without ego. The Craftsman obsesses over the quality of the work itself, not the recognition. Browser Toast combines both: it knows exactly what you need (your default browser changed, now) and delivers it with invisible precision — every time, perfectly toasted.
 
-### If Browser Flow Were...
+### If Browser Toast Were...
 
 | Prompt | Answer |
 | --- | --- |
 | A car | A matte black Porsche 911 — no spoiler, no decals, just engineering |
 | A font | Helvetica Neue Light — clean, confident, everywhere and nowhere |
 | A material | Brushed aluminum — premium, tactile, ages well |
-| A sound | A single mechanical keyboard click — satisfying, precise, done |
+| A sound | A toaster popping — satisfying, crisp, done |
+| An appliance | A Dualit toaster — industrial, beautiful, does one thing flawlessly |
 | A place | A Japanese tool shop — everything has one purpose, nothing is extra |
 
 ---
@@ -38,27 +39,28 @@ The Sage knows the right answer and delivers it without ego. The Craftsman obses
 
 ### Name
 
-**Browser Flow**
+**Browser Toast**
 
-"Flow" captures both the literal (URLs flow to the right browser) and the experiential (effortless, uninterrupted workflow). It's a name that works as a product and as a verb — "just Browser Flow it."
+"Toast" captures the action: quick, crisp, done. You put something in, it comes out exactly how you want it. The name works because it's unexpected in tech — warm, tactile, human — while being instantly searchable with zero noise in results. It's a name that works as a product and as a verb — "just toast it to Firefox."
 
 ### Positioning Statement
 
-Browser Flow is the macOS menu bar utility that routes URLs to the right browser in one click. No settings panels, no configuration files, no friction. It's the quiet layer between your links and your browsers that you forget is there — until you use someone else's Mac and miss it.
+Browser Toast is the macOS menu bar utility that sets your default browser in one click. No settings panels, no configuration files, no friction. It's the warm, reliable shortcut between your links and your browsers that you forget is there — until you use someone else's Mac and miss it.
 
 ### Tagline
 
-**"URLs flow to the right browser."**
+**"Toast your browser."**
 
 Alternatives for different contexts:
 
 | Context | Tagline |
 | --- | --- |
-| Hero / primary | URLs flow to the right browser. |
-| Short / badge | Click. Flow. Browse. |
+| Hero / primary | Toast your browser. |
+| Short / badge | Click. Toast. Browse. |
 | Technical | Your default browser, one click from the menu bar. |
 | Conversational | Stop digging through System Settings. |
 | Emotional | The menu bar shortcut macOS forgot. |
+| Playful | Every browser, toasted just right. |
 
 ### Brand Pillars
 
@@ -80,21 +82,21 @@ Alternatives for different contexts:
 
 2. **One sentence beats two.** If a feature can be explained in six words, use six words. Respect the reader's time the way the app respects the user's attention.
 
-3. **Confident, not clever.** No puns. No startup-speak ("leverage," "empower," "revolutionize"). Say what you mean.
+3. **Confident, not clever.** No puns beyond the name itself. No startup-speak ("leverage," "empower," "revolutionize"). Say what you mean.
 
 4. **Technical when it helps.** "Pure AppKit, zero dependencies" means something to the target audience. Don't dumb it down. But don't gatekeep either — keep the primary message accessible.
 
-5. **Warm in small doses.** The origin story can be personal ("I got tired of..."). Feature descriptions are factual. The tone shifts based on context, but never gets corporate.
+5. **Warm in small doses.** The origin story can be personal ("I got tired of..."). Feature descriptions are factual. The tone shifts based on context, but never gets corporate. The "toast" metaphor adds warmth without forcing it.
 
 ### Voice Examples
 
 | Context | Do | Don't |
 | --- | --- | --- |
-| Feature description | "See your IP, ISP, and VPN status in the menu." | "Browser Flow's integrated network intelligence dashboard provides real-time visibility into your connection metadata." |
+| Feature description | "See your IP, ISP, and VPN status in the menu." | "Browser Toast's integrated network intelligence dashboard provides real-time visibility into your connection metadata." |
 | Error message | "Couldn't change the default browser. macOS may need permission." | "Oops! Something went wrong. Please try again later." |
-| README intro | "Browser Flow changes your default browser from the menu bar." | "Welcome to Browser Flow! We're so excited to help you manage your browsing experience." |
+| README intro | "Browser Toast changes your default browser from the menu bar." | "Welcome to Browser Toast! We're so excited to help you manage your browsing experience." |
 | Social post | "I switch between 4 browsers a day. This keeps it sane." | "Excited to announce our groundbreaking new utility!" |
-| About panel | "Browser Flow 1.0 — by Adam Abernathy" | "Thank you for choosing Browser Flow! We hope you love it!" |
+| About panel | "Browser Toast 1.0 — by Adam Abernathy" | "Thank you for choosing Browser Toast! We hope you love it!" |
 
 ### Writing Checklist
 
@@ -120,13 +122,13 @@ The app itself uses only semantic `NSColor` — no brand colors touch the UI. Th
 | --- | --- | --- | --- | --- |
 | Text | Ink | `#1D1D1F` | `#F5F5F7` | Headlines, body copy |
 | Text secondary | Smoke | `#86868B` | `#86868B` | Captions, metadata |
-| Accent | Stream | `#0071E3` | `#2997FF` | CTAs, links, the "flow" highlight |
+| Accent | Crisp | `#E85D2A` | `#FF7A45` | CTAs, links, the "toast" highlight |
 | Surface | Paper | `#FBFBFD` | `#141414` | Page backgrounds |
 | Card | Pane | `#FFFFFF` | `#1C1C1E` | Elevated surfaces |
 | Border | Mist | `rgba(0,0,0,0.06)` | `rgba(255,255,255,0.08)` | Dividers, card edges |
 | Success | Current | `#34C759` | `#30D158` | Active browser indicator |
 
-**Why "Stream" for the accent:** The blue references both macOS system blue (familiarity) and the concept of flow/water/streaming. It's the color of the active path in the flow branch icon.
+**Why "Crisp" for the accent:** A warm amber-orange — the color of perfectly toasted bread. It signals warmth, readiness, and the moment something is done. It's distinctive in a sea of blue-accented developer tools.
 
 > [!TIP]
 > The accent color should only appear on interactive elements and the "selected" state. Overusing it dilutes its meaning. When in doubt, use Ink.
@@ -146,22 +148,22 @@ The app itself uses only semantic `NSColor` — no brand colors touch the UI. Th
 ### Iconography
 
 - **SF Symbols only.** No custom icon set, no raster icons, no icon fonts.
-- **Monochrome default.** Color only when it conveys state (green = active, blue = interactive).
+- **Monochrome default.** Color only when it conveys state (green = active, amber = interactive).
 - **16x16 in menus.** 20x20 in feature cards on the website. Always set `accessibilityDescription`.
 - **Weight: medium.** Matches SF Pro Text regular in optical weight.
 
-### The Flow Branch Mark
+### The Toast Mark
 
-The app icon is a custom-drawn flow branch glyph inside a squircle:
+The app icon is a custom-drawn glyph inside a squircle — a stylized toaster slot with a browser emerging, or alternatively, the existing flow-branch routing mark that represents URLs routing to the right browser:
 
 ```
-                         ○   ← outlined (other browser)
-                      ╱
-             ╱‾‾‾‾‾‾
-   ● ═══════════════ ●      ← bold, filled (selected browser)
-             ╲______
-                      ╲
-                         ○   ← outlined (other browser)
+                         o   <-- outlined (other browser)
+                      /
+             /------
+   * =============== *      <-- bold, filled (selected browser)
+             \------
+                      \
+                         o   <-- outlined (other browser)
 ```
 
 **Properties:**
@@ -171,27 +173,27 @@ The app icon is a custom-drawn flow branch glyph inside a squircle:
 - Source node (left): filled circle, r=14
 - Selected destination (center-right): filled circle, r=18, connected by bold 7.5pt line
 - Other destinations (top/bottom-right): outlined circles, r=13, connected by 5.5pt bezier curves at 40% opacity
-- S-curves use cubic beziers with matched control points for smooth flow
+- S-curves use cubic beziers with matched control points for smooth routing
 
 **Lockup options:**
 
 ```
-[Icon]  Browser Flow                   ← Horizontal lockup (primary)
+[Icon]  Browser Toast                   <-- Horizontal lockup (primary)
 
         [Icon]
-    Browser Flow                       ← Stacked lockup (social, favicon)
+    Browser Toast                       <-- Stacked lockup (social, favicon)
 ```
 
-**Wordmark:** "Browser Flow" in SF Pro Display Semibold, tracked at -0.01em. "Browser" in Ink, "Flow" in Accent (Stream blue) — the only place the name gets color treatment.
+**Wordmark:** "Browser Toast" in SF Pro Display Semibold, tracked at -0.01em. "Browser" in Ink, "Toast" in Accent (Crisp amber) — the only place the name gets color treatment.
 
 ### Photography & Imagery Style
 
 No stock photography. The brand is purely typographic and diagrammatic.
 
 - **Screenshots:** Always framed in macOS window chrome. Light and dark variants.
-- **Diagrams:** Use the flow-branch visual language. Lines that branch and converge. Dots as nodes.
-- **Backgrounds:** Subtle mesh gradients inspired by macOS wallpapers — never flat color, never busy.
-- **Motion:** If animated, use ease-in-out curves. No bouncing, no spring physics. Smooth like flow.
+- **Diagrams:** Use the routing visual language. Lines that branch and converge. Dots as nodes.
+- **Backgrounds:** Subtle warm-toned mesh gradients — never flat color, never busy.
+- **Motion:** If animated, use ease-in-out curves. No bouncing, no spring physics. Smooth and satisfying — like a toaster popping.
 
 ---
 
@@ -228,10 +230,10 @@ No stock photography. The brand is purely typographic and diagrammatic.
 | Action | Channel | Details |
 | --- | --- | --- |
 | Polish the GitHub README | GitHub | The README is the real landing page. Add a hero GIF showing a browser change in action. |
-| Ship the landing page | Web | Single-page site at `browserflow.app` (see Website section). |
-| Write the origin story | Dev.to / blog | "Why I built Browser Flow" — relatable frustration, simple solution. |
+| Ship the landing page | Web | Single-page site at `browsertoast.com` (see Website section). |
+| Write the origin story | Dev.to / blog | "Why I built Browser Toast" — relatable frustration, simple solution. |
 | Submit to directories | Directories | macapps.link, opensourcemac.org, awesome-macos on GitHub. |
-| Create a Homebrew cask | Homebrew | `brew install --cask browser-flow` — the developer's expected install path. |
+| Create a Homebrew cask | Homebrew | `brew install --cask browser-toast` — the developer's expected install path. |
 
 ### Phase 2 — Launch (v1.0 Release)
 
@@ -239,7 +241,7 @@ No stock photography. The brand is purely typographic and diagrammatic.
 
 | Action | Channel | Details |
 | --- | --- | --- |
-| Show HN | Hacker News | "Show HN: Browser Flow — change your default macOS browser from the menu bar." Factual, short. |
+| Show HN | Hacker News | "Show HN: Browser Toast — change your default macOS browser from the menu bar." Factual, short. |
 | Reddit posts | r/macapps, r/macOS, r/webdev | Short post with GIF, link to site, one-liner install. |
 | Product Hunt launch | Product Hunt | Tuesday launch. 5 screenshots, 30s GIF, maker comment with the origin story. |
 | Social threads | X, Mastodon, Bluesky | "I switch between 4 browsers every day. macOS makes this annoying. So I built a menu bar app." Thread with GIF. |
@@ -263,7 +265,7 @@ No stock photography. The brand is purely typographic and diagrammatic.
 
 ### URL
 
-`browserflow.app` (preferred) or `getbrowserflow.com`
+`browsertoast.com` (preferred) or `getbrowsertoast.com`
 
 ### Structure
 
@@ -274,10 +276,10 @@ Single-page marketing site. Fast, native-feeling, converts visitors to installer
 #### 1. Hero
 
 ```
-[Flow Branch Icon]
+[Toast Mark Icon]
 
-Browser Flow
-URLs flow to the right browser.
+Browser Toast
+Toast your browser.
 
 A macOS menu bar utility that changes your default
 browser in one click. Free and open source.
@@ -288,7 +290,7 @@ Requires macOS 14 (Sonoma) or later.
 ```
 
 - Centered layout, generous whitespace
-- Subtle animated mesh gradient background (CSS only, no JS)
+- Subtle warm mesh gradient background (CSS only, no JS)
 - Download links to latest GitHub Release `.zip`
 - "View on GitHub" as secondary outline button
 
@@ -300,7 +302,7 @@ Requires macOS 14 (Sonoma) or later.
   3. Click a different browser
   4. Checkmark moves — done
 - Framed in macOS menu bar chrome mockup
-- Caption: "One click. New default."
+- Caption: "One click. Perfectly toasted."
 
 #### 3. Features
 
@@ -329,12 +331,12 @@ Direct `.zip` from GitHub Releases.
 
 **Homebrew** *(coming soon)*
 ```bash
-brew install --cask browser-flow
+brew install --cask browser-toast
 ```
 
 #### 5. Before & After
 
-| Without Browser Flow | With Browser Flow |
+| Without Browser Toast | With Browser Toast |
 | --- | --- |
 | Open System Settings | Click the menu bar icon |
 | Navigate to Desktop & Dock | Pick a browser |
@@ -346,7 +348,7 @@ Caption: "Five steps become one."
 
 #### 6. Open Source
 
-> Browser Flow is MIT-licensed and open source.
+> Browser Toast is MIT-licensed and open source.
 > Built with pure AppKit. Zero dependencies. Signed and notarized.
 
 GitHub stars badge. Build status badge. Link to repo.
@@ -363,7 +365,7 @@ GitHub stars badge. Build status badge. Link to repo.
 :root {
   --color-ink: #1D1D1F;
   --color-smoke: #86868B;
-  --color-stream: #0071E3;
+  --color-crisp: #E85D2A;
   --color-paper: #FBFBFD;
   --color-pane: #FFFFFF;
   --color-mist: rgba(0, 0, 0, 0.06);
@@ -378,7 +380,7 @@ GitHub stars badge. Build status badge. Link to repo.
   :root {
     --color-ink: #F5F5F7;
     --color-smoke: #86868B;
-    --color-stream: #2997FF;
+    --color-crisp: #FF7A45;
     --color-paper: #141414;
     --color-pane: #1C1C1E;
     --color-mist: rgba(255, 255, 255, 0.08);
@@ -401,7 +403,7 @@ GitHub stars badge. Build status badge. Link to repo.
 
 | Day | Action | Channel |
 | --- | --- | --- |
-| -7 | Publish "Why I built Browser Flow" | Dev.to / blog |
+| -7 | Publish "Why I built Browser Toast" | Dev.to / blog |
 | -3 | Submit to macapps.link, opensourcemac.org | Directories |
 | 0 | Ship v1.0. Publish site. Post Show HN. | GitHub, Web, HN |
 | 0 | Post to r/macapps, r/macOS | Reddit |
@@ -417,14 +419,14 @@ GitHub stars badge. Build status badge. Link to repo.
 
 ## Competitive Landscape
 
-| Tool | Type | How Browser Flow is different |
+| Tool | Type | How Browser Toast is different |
 | --- | --- | --- |
 | System Settings | Built-in | 1 click vs. 5 steps |
-| Browserosaurus | Open source | Browserosaurus intercepts every link. Browser Flow changes the *default* — simpler model. |
-| Choosy | Paid ($10) | Browser Flow is free and open source. Choosy does rule-based routing — different use case. |
-| Finicky | Open source | Finicky needs a config file. Browser Flow is zero-config. |
+| Browserosaurus | Open source | Browserosaurus intercepts every link. Browser Toast changes the *default* — simpler model. |
+| Choosy | Paid ($10) | Browser Toast is free and open source. Choosy does rule-based routing — different use case. |
+| Finicky | Open source | Finicky needs a config file. Browser Toast is zero-config. |
 
-**Browser Flow wins on simplicity.** One thing, done well, out of the way.
+**Browser Toast wins on simplicity.** One thing, done well, out of the way.
 
 ---
 
@@ -436,12 +438,14 @@ No telemetry in the app. Measure success externally:
 - **Release download counts** — `gh api` can pull these
 - **Install script hits** — raw.githubusercontent.com referrer logs
 - **Website traffic** — Plausible or Fathom if privacy-respecting analytics are added later
-- **Community mentions** — periodic search for "Browser Flow" on Twitter, Reddit, HN
+- **Community mentions** — periodic search for "Browser Toast" on Twitter, Reddit, HN
 
 ---
 
 ## Summary
 
-Browser Flow is a brand built on restraint. The persona is quiet, competent, and generous. The visual identity is monochrome with a single accent color that means "active." The voice is short, direct, and verb-first. The icon — a flow branch — is the brand in one image: one input, multiple paths, one clear choice.
+Browser Toast is a brand built on restraint and warmth. The persona is quiet, competent, and generous. The visual identity is monochrome with a single warm accent color — Crisp amber — that means "active" and "done." The voice is short, direct, and verb-first. The icon represents routing: one input, multiple paths, one clear choice.
 
-The core message: **"URLs flow to the right browser."**
+The name is unexpected, memorable, and completely uncontested in search. It's warm where developer tools are cold, playful where utilities are sterile, and human where software is abstract.
+
+The core message: **"Toast your browser."**
