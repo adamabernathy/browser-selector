@@ -632,12 +632,6 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
     private func makeAppIdentityIcon() -> NSImage {
         let size = NSSize(width: 512, height: 512)
         let image = NSImage(size: size, flipped: false) { _ in
-            let cx: CGFloat = 256
-            let cy: CGFloat = 256
-            let ringRadius: CGFloat = 100
-            let selectedDotRadius: CGFloat = 18
-            let normalDotRadius: CGFloat = 13
-
             // --- Background squircle ---
             NSColor.windowBackgroundColor.setFill()
             NSBezierPath(
@@ -645,70 +639,90 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
                 xRadius: 96, yRadius: 96
             ).fill()
 
-            // --- Compass ring ---
-            let ring = NSBezierPath(ovalIn: NSRect(
-                x: cx - ringRadius, y: cy - ringRadius,
-                width: ringRadius * 2, height: ringRadius * 2
-            ))
-            ring.lineWidth = 2.5
-            NSColor.labelColor.withAlphaComponent(0.25).setStroke()
-            ring.stroke()
+            // Flow branch: one source node branching to three destinations.
+            // The center branch is the selected/active browser path.
+            let sourceX: CGFloat = 162
+            let sourceY: CGFloat = 256
+            let destX: CGFloat = 352
+            let destTop: CGFloat = 356
+            let destMid: CGFloat = 256
+            let destBot: CGFloat = 156
 
-            // --- Dots at cardinal points ---
-            // (angle in degrees: 0 = right, 90 = up)
-            let dotAngles: [(angle: CGFloat, selected: Bool)] = [
-                (90, true), (0, false), (270, false), (180, false),
-            ]
-            for dot in dotAngles {
-                let rad = dot.angle * .pi / 180
-                let dx = cx + ringRadius * cos(rad)
-                let dy = cy + ringRadius * sin(rad)
-                let r = dot.selected ? selectedDotRadius : normalDotRadius
-                let oval = NSRect(x: dx - r, y: dy - r, width: r * 2, height: r * 2)
+            let sourceRadius: CGFloat = 14
+            let selectedRadius: CGFloat = 18
+            let normalRadius: CGFloat = 13
+            let branchStroke: CGFloat = 5.5
+            let selectedStroke: CGFloat = 7.5
+            let bendX: CGFloat = 258  // control-point x for the S-curves
 
-                if dot.selected {
-                    NSColor.labelColor.setFill()
-                    NSBezierPath(ovalIn: oval).fill()
-                } else {
-                    // Clear the ring behind the dot, then outline it
-                    NSColor.windowBackgroundColor.setFill()
-                    NSBezierPath(ovalIn: oval.insetBy(dx: -2, dy: -2)).fill()
-                    let path = NSBezierPath(ovalIn: oval)
-                    path.lineWidth = 4
-                    NSColor.labelColor.setStroke()
-                    path.stroke()
-                }
-            }
+            // --- Branch lines (draw behind nodes) ---
 
-            // --- Needle: north pointer (toward selected dot) ---
-            let needleGap: CGFloat = 8
-            let northTipY = cy + ringRadius - selectedDotRadius - needleGap
-            let needleHalfWidth: CGFloat = 16
+            // Top branch (unselected)
+            NSColor.labelColor.withAlphaComponent(0.4).setStroke()
+            let topBranch = NSBezierPath()
+            topBranch.lineWidth = branchStroke
+            topBranch.lineCapStyle = .round
+            topBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
+            topBranch.curve(
+                to: NSPoint(x: destX - normalRadius, y: destTop),
+                controlPoint1: NSPoint(x: bendX, y: sourceY),
+                controlPoint2: NSPoint(x: bendX, y: destTop)
+            )
+            topBranch.stroke()
+
+            // Bottom branch (unselected)
+            let botBranch = NSBezierPath()
+            botBranch.lineWidth = branchStroke
+            botBranch.lineCapStyle = .round
+            botBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
+            botBranch.curve(
+                to: NSPoint(x: destX - normalRadius, y: destBot),
+                controlPoint1: NSPoint(x: bendX, y: sourceY),
+                controlPoint2: NSPoint(x: bendX, y: destBot)
+            )
+            botBranch.stroke()
+
+            // Center branch (selected — bold, full opacity)
+            NSColor.labelColor.setStroke()
+            let midBranch = NSBezierPath()
+            midBranch.lineWidth = selectedStroke
+            midBranch.lineCapStyle = .round
+            midBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
+            midBranch.line(to: NSPoint(x: destX - selectedRadius, y: destMid))
+            midBranch.stroke()
+
+            // --- Destination nodes ---
             NSColor.labelColor.setFill()
-            let northNeedle = NSBezierPath()
-            northNeedle.move(to: NSPoint(x: cx, y: northTipY))
-            northNeedle.line(to: NSPoint(x: cx - needleHalfWidth, y: cy))
-            northNeedle.line(to: NSPoint(x: cx + needleHalfWidth, y: cy))
-            northNeedle.close()
-            northNeedle.fill()
+            NSColor.labelColor.setStroke()
 
-            // --- Needle: south tail (thinner, translucent) ---
-            let southTipY = cy - ringRadius + normalDotRadius + needleGap
-            let tailHalfWidth: CGFloat = 8
-            NSColor.labelColor.withAlphaComponent(0.35).setFill()
-            let southNeedle = NSBezierPath()
-            southNeedle.move(to: NSPoint(x: cx, y: southTipY))
-            southNeedle.line(to: NSPoint(x: cx - tailHalfWidth, y: cy))
-            southNeedle.line(to: NSPoint(x: cx + tailHalfWidth, y: cy))
-            southNeedle.close()
-            southNeedle.fill()
+            // Top destination (outlined)
+            let topOval = NSRect(
+                x: destX - normalRadius, y: destTop - normalRadius,
+                width: normalRadius * 2, height: normalRadius * 2
+            )
+            let topDot = NSBezierPath(ovalIn: topOval)
+            topDot.lineWidth = 4
+            topDot.stroke()
 
-            // --- Center pivot ---
-            let pivotRadius: CGFloat = 8
-            NSColor.labelColor.setFill()
+            // Bottom destination (outlined)
+            let botOval = NSRect(
+                x: destX - normalRadius, y: destBot - normalRadius,
+                width: normalRadius * 2, height: normalRadius * 2
+            )
+            let botDot = NSBezierPath(ovalIn: botOval)
+            botDot.lineWidth = 4
+            botDot.stroke()
+
+            // Center destination (filled — the selected browser)
             NSBezierPath(ovalIn: NSRect(
-                x: cx - pivotRadius, y: cy - pivotRadius,
-                width: pivotRadius * 2, height: pivotRadius * 2
+                x: destX - selectedRadius, y: destMid - selectedRadius,
+                width: selectedRadius * 2, height: selectedRadius * 2
+            )).fill()
+
+            // --- Source node (filled) ---
+            NSBezierPath(ovalIn: NSRect(
+                x: sourceX - sourceRadius, y: sourceY - sourceRadius,
+                width: sourceRadius * 2, height: sourceRadius * 2
             )).fill()
 
             return true
