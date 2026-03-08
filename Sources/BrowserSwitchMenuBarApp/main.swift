@@ -32,7 +32,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         if #available(macOS 26, *) {
             return "circle.grid.2x2.topleft.checkmark.filled"
         } else {
-            return "figure.curling"
+            return "arrow.triangle.2.circlepath"
         }
     }
 
@@ -631,23 +631,89 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
 
     private func makeAppIdentityIcon() -> NSImage {
         let size = NSSize(width: 512, height: 512)
-        let image = NSImage(size: size, flipped: false) { drawRect in
-            let bgRect = NSRect(origin: .zero, size: size)
-            NSColor.windowBackgroundColor.setFill()
-            NSBezierPath(roundedRect: bgRect, xRadius: 96, yRadius: 96).fill()
+        let image = NSImage(size: size, flipped: false) { _ in
+            let cx: CGFloat = 256
+            let cy: CGFloat = 256
+            let ringRadius: CGFloat = 100
+            let selectedDotRadius: CGFloat = 18
+            let normalDotRadius: CGFloat = 13
 
-            if let symbol = NSImage(
-                systemSymbolName: self.menuBarSymbolName,
-                accessibilityDescription: "Browser Switch")
-            {
-                let config = NSImage.SymbolConfiguration(pointSize: 300, weight: .medium)
-                    .applying(NSImage.SymbolConfiguration(paletteColors: [.labelColor]))
-                symbol.isTemplate = false
-                symbol.withSymbolConfiguration(config)?
-                    .draw(in: NSRect(x: 106, y: 106, width: 300, height: 300))
+            // --- Background squircle ---
+            NSColor.windowBackgroundColor.setFill()
+            NSBezierPath(
+                roundedRect: NSRect(origin: .zero, size: size),
+                xRadius: 96, yRadius: 96
+            ).fill()
+
+            // --- Compass ring ---
+            let ring = NSBezierPath(ovalIn: NSRect(
+                x: cx - ringRadius, y: cy - ringRadius,
+                width: ringRadius * 2, height: ringRadius * 2
+            ))
+            ring.lineWidth = 2.5
+            NSColor.labelColor.withAlphaComponent(0.25).setStroke()
+            ring.stroke()
+
+            // --- Dots at cardinal points ---
+            // (angle in degrees: 0 = right, 90 = up)
+            let dotAngles: [(angle: CGFloat, selected: Bool)] = [
+                (90, true), (0, false), (270, false), (180, false),
+            ]
+            for dot in dotAngles {
+                let rad = dot.angle * .pi / 180
+                let dx = cx + ringRadius * cos(rad)
+                let dy = cy + ringRadius * sin(rad)
+                let r = dot.selected ? selectedDotRadius : normalDotRadius
+                let oval = NSRect(x: dx - r, y: dy - r, width: r * 2, height: r * 2)
+
+                if dot.selected {
+                    NSColor.labelColor.setFill()
+                    NSBezierPath(ovalIn: oval).fill()
+                } else {
+                    // Clear the ring behind the dot, then outline it
+                    NSColor.windowBackgroundColor.setFill()
+                    NSBezierPath(ovalIn: oval.insetBy(dx: -2, dy: -2)).fill()
+                    let path = NSBezierPath(ovalIn: oval)
+                    path.lineWidth = 4
+                    NSColor.labelColor.setStroke()
+                    path.stroke()
+                }
             }
+
+            // --- Needle: north pointer (toward selected dot) ---
+            let needleGap: CGFloat = 8
+            let northTipY = cy + ringRadius - selectedDotRadius - needleGap
+            let needleHalfWidth: CGFloat = 16
+            NSColor.labelColor.setFill()
+            let northNeedle = NSBezierPath()
+            northNeedle.move(to: NSPoint(x: cx, y: northTipY))
+            northNeedle.line(to: NSPoint(x: cx - needleHalfWidth, y: cy))
+            northNeedle.line(to: NSPoint(x: cx + needleHalfWidth, y: cy))
+            northNeedle.close()
+            northNeedle.fill()
+
+            // --- Needle: south tail (thinner, translucent) ---
+            let southTipY = cy - ringRadius + normalDotRadius + needleGap
+            let tailHalfWidth: CGFloat = 8
+            NSColor.labelColor.withAlphaComponent(0.35).setFill()
+            let southNeedle = NSBezierPath()
+            southNeedle.move(to: NSPoint(x: cx, y: southTipY))
+            southNeedle.line(to: NSPoint(x: cx - tailHalfWidth, y: cy))
+            southNeedle.line(to: NSPoint(x: cx + tailHalfWidth, y: cy))
+            southNeedle.close()
+            southNeedle.fill()
+
+            // --- Center pivot ---
+            let pivotRadius: CGFloat = 8
+            NSColor.labelColor.setFill()
+            NSBezierPath(ovalIn: NSRect(
+                x: cx - pivotRadius, y: cy - pivotRadius,
+                width: pivotRadius * 2, height: pivotRadius * 2
+            )).fill()
+
             return true
         }
+        image.accessibilityDescription = "Browser Switch"
         return image
     }
 
