@@ -49,14 +49,15 @@ Browser Toast is the macOS menu bar utility that sets your default browser in on
 
 ### Tagline
 
-**"Toast your browser."**
+**"Managing browsers is as simple as making toast."**
 
 Alternatives for different contexts:
 
 | Context | Tagline |
 | --- | --- |
-| Hero / primary | Toast your browser. |
+| Hero / primary | Managing browsers is as simple as making toast. |
 | Short / badge | Click. Toast. Browse. |
+| Action | Toast your browser. |
 | Technical | Your default browser, one click from the menu bar. |
 | Conversational | Stop digging through System Settings. |
 | Emotional | The menu bar shortcut macOS forgot. |
@@ -279,7 +280,7 @@ Single-page marketing site. Fast, native-feeling, converts visitors to installer
 [Toast Mark Icon]
 
 Browser Toast
-Toast your browser.
+Managing browsers is as simple as making toast.
 
 A macOS menu bar utility that changes your default
 browser in one click. Free and open source.
@@ -448,4 +449,4 @@ Browser Toast is a brand built on restraint and warmth. The persona is quiet, co
 
 The name is unexpected, memorable, and completely uncontested in search. It's warm where developer tools are cold, playful where utilities are sterile, and human where software is abstract.
 
-The core message: **"Toast your browser."**
+The core message: **"Managing browsers is as simple as making toast."**
