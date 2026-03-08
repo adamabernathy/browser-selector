@@ -1,66 +1,197 @@
-# Browser Switch — Brand, Marketing Strategy & Website Plan
+# Browser Flow — Brand Identity, Marketing Strategy & Website Plan
+
+## Brand Persona
+
+If Browser Flow were a person, it would be the senior engineer at the coffee shop who has strong opinions about tools but never brings them up unprompted. Calm. Competent. Minimal setup, maximum output. The kind of person who has three sentences where others need three paragraphs — and every sentence lands.
+
+Browser Flow doesn't try to impress you. It just works, and you notice the absence of friction more than the presence of a product.
+
+### Character Traits
+
+| Trait | Expression |
+| --- | --- |
+| **Quiet confidence** | Never oversells. States what it does. Lets you decide. |
+| **Respectful of attention** | No onboarding wizard, no tooltip tour, no "what's new" popup. You click, it works. |
+| **Opinionated simplicity** | One way to do things, and it's the right way. No preferences panel with 40 toggles. |
+| **Craftsmanship over features** | Every pixel considered. Signed, notarized, zero dependencies. The details you don't see are the ones that matter most. |
+| **Generous** | Free, open source, no tracking. Gives more than it asks. |
+
+### Brand Archetype
+
+**The Sage** meets **The Craftsman.**
+
+The Sage knows the right answer and delivers it without ego. The Craftsman obsesses over the quality of the work itself, not the recognition. Browser Flow combines both: it knows exactly what you need (your default browser changed, now) and delivers it with invisible precision.
+
+### If Browser Flow Were...
+
+| Prompt | Answer |
+| --- | --- |
+| A car | A matte black Porsche 911 — no spoiler, no decals, just engineering |
+| A font | Helvetica Neue Light — clean, confident, everywhere and nowhere |
+| A material | Brushed aluminum — premium, tactile, ages well |
+| A sound | A single mechanical keyboard click — satisfying, precise, done |
+| A place | A Japanese tool shop — everything has one purpose, nothing is extra |
+
+---
 
 ## Brand Identity
 
+### Name
+
+**Browser Flow**
+
+"Flow" captures both the literal (URLs flow to the right browser) and the experiential (effortless, uninterrupted workflow). It's a name that works as a product and as a verb — "just Browser Flow it."
+
 ### Positioning Statement
 
-Browser Switch is the invisible productivity tool for Mac power users who juggle multiple browsers daily. It replaces a buried System Settings panel with a single menu bar click — native, lightweight, and respectful of your attention.
+Browser Flow is the macOS menu bar utility that routes URLs to the right browser in one click. No settings panels, no configuration files, no friction. It's the quiet layer between your links and your browsers that you forget is there — until you use someone else's Mac and miss it.
+
+### Tagline
+
+**"URLs flow to the right browser."**
+
+Alternatives for different contexts:
+
+| Context | Tagline |
+| --- | --- |
+| Hero / primary | URLs flow to the right browser. |
+| Short / badge | Click. Flow. Browse. |
+| Technical | Your default browser, one click from the menu bar. |
+| Conversational | Stop digging through System Settings. |
+| Emotional | The menu bar shortcut macOS forgot. |
 
 ### Brand Pillars
 
-| Pillar | Description |
-| --- | --- |
-| **Invisible by design** | Menu bar only, no Dock icon, no windows. It stays out of the way until you need it. |
-| **Native & trustworthy** | Pure AppKit, signed and notarized, zero dependencies. Feels like part of macOS. |
-| **One-click simplicity** | The entire value proposition fits in three words: click, switch, done. |
-| **Power when you want it** | Option-key power tools, network context, Caffeine mode — depth without clutter. |
+| Pillar | What it means | How it shows up |
+| --- | --- | --- |
+| **Effortless** | The core promise is removal of friction. | One click. No config. No onboarding. |
+| **Native** | It should feel like Apple built it. | Pure AppKit. SF Symbols. Semantic colors. Signed and notarized. |
+| **Invisible** | The best utility is one you forget about. | Menu bar only. No Dock icon. No windows. Silent launch. |
+| **Honest** | No dark patterns, no data collection, no upsells. | Open source. MIT license. "No tracking" as a feature. |
+| **Deep** | Simple surface, powerful underneath. | Option-key power tools. Network context. Caffeine mode. |
 
-### Brand Voice
+---
 
-- **Concise.** Short sentences. No fluff. Mirror the app's efficiency.
-- **Confident, not loud.** State facts. Let the product speak.
-- **Technical but approachable.** Developers are the primary audience, but the app is simple enough for anyone.
-- **Warm, not corporate.** First person ("we built this because...") when telling the story. Direct address ("you") for benefits.
+## Brand Voice
 
-### Tagline Options
+### Principles
 
-1. **"Switch browsers. Not workflows."** (recommended)
-2. "Your default browser, one click away."
-3. "The menu bar shortcut macOS forgot."
-4. "Click. Switch. Done."
+1. **Lead with the verb.** Don't describe what the app is. Describe what it does. "Change your default browser" not "a utility for managing browser preferences."
+
+2. **One sentence beats two.** If a feature can be explained in six words, use six words. Respect the reader's time the way the app respects the user's attention.
+
+3. **Confident, not clever.** No puns. No startup-speak ("leverage," "empower," "revolutionize"). Say what you mean.
+
+4. **Technical when it helps.** "Pure AppKit, zero dependencies" means something to the target audience. Don't dumb it down. But don't gatekeep either — keep the primary message accessible.
+
+5. **Warm in small doses.** The origin story can be personal ("I got tired of..."). Feature descriptions are factual. The tone shifts based on context, but never gets corporate.
+
+### Voice Examples
+
+| Context | Do | Don't |
+| --- | --- | --- |
+| Feature description | "See your IP, ISP, and VPN status in the menu." | "Browser Flow's integrated network intelligence dashboard provides real-time visibility into your connection metadata." |
+| Error message | "Couldn't change the default browser. macOS may need permission." | "Oops! Something went wrong. Please try again later." |
+| README intro | "Browser Flow changes your default browser from the menu bar." | "Welcome to Browser Flow! We're so excited to help you manage your browsing experience." |
+| Social post | "I switch between 4 browsers a day. This keeps it sane." | "Excited to announce our groundbreaking new utility!" |
+| About panel | "Browser Flow 1.0 — by Adam Abernathy" | "Thank you for choosing Browser Flow! We hope you love it!" |
+
+### Writing Checklist
+
+Before publishing any copy, check:
+
+- [ ] Can I cut a sentence without losing meaning? Cut it.
+- [ ] Am I describing the product or the experience? Prefer the experience.
+- [ ] Would I say this out loud to a colleague? If not, rewrite.
+- [ ] Is the first word a verb or a noun? Prefer verbs.
+- [ ] Does this sound like Apple's copywriting? Good. Does it sound like a SaaS landing page? Rewrite.
+
+---
+
+## Visual Identity
 
 ### Color Palette
 
-Stay minimal and let macOS semantics lead. The brand palette is for marketing and the website only — the app itself uses only semantic `NSColor`.
+The app itself uses only semantic `NSColor` — no brand colors touch the UI. The palette below is for marketing, the website, and social assets only.
 
-| Role | Color | Hex | Usage |
-| --- | --- | --- | --- |
-| Primary | Charcoal | `#1D1D1F` | Headlines, body text |
-| Accent | macOS Blue | `#007AFF` | CTAs, links, highlights |
-| Surface | Snow | `#FAFAFA` | Page backgrounds (light) |
-| Surface Dark | Graphite | `#161617` | Page backgrounds (dark) |
-| Success | System Green | `#34C759` | Checkmark / "current browser" indicator |
-| Muted | Warm Gray | `#8E8E93` | Secondary text, captions |
+**Core palette:**
+
+| Role | Name | Light | Dark | Usage |
+| --- | --- | --- | --- | --- |
+| Text | Ink | `#1D1D1F` | `#F5F5F7` | Headlines, body copy |
+| Text secondary | Smoke | `#86868B` | `#86868B` | Captions, metadata |
+| Accent | Stream | `#0071E3` | `#2997FF` | CTAs, links, the "flow" highlight |
+| Surface | Paper | `#FBFBFD` | `#141414` | Page backgrounds |
+| Card | Pane | `#FFFFFF` | `#1C1C1E` | Elevated surfaces |
+| Border | Mist | `rgba(0,0,0,0.06)` | `rgba(255,255,255,0.08)` | Dividers, card edges |
+| Success | Current | `#34C759` | `#30D158` | Active browser indicator |
+
+**Why "Stream" for the accent:** The blue references both macOS system blue (familiarity) and the concept of flow/water/streaming. It's the color of the active path in the flow branch icon.
+
+> [!TIP]
+> The accent color should only appear on interactive elements and the "selected" state. Overusing it dilutes its meaning. When in doubt, use Ink.
 
 ### Typography
 
-| Role | Font | Fallback |
-| --- | --- | --- |
-| Headlines | SF Pro Display (semibold) | -apple-system, system-ui |
-| Body | SF Pro Text (regular) | -apple-system, system-ui |
-| Code | SF Mono | ui-monospace, monospace |
+| Role | Font | Weight | Size Range | Fallback |
+| --- | --- | --- | --- | --- |
+| Display | SF Pro Display | Semibold | 36–64px | -apple-system, system-ui, sans-serif |
+| Headline | SF Pro Display | Medium | 24–32px | -apple-system, system-ui, sans-serif |
+| Body | SF Pro Text | Regular | 16–18px | -apple-system, system-ui, sans-serif |
+| Caption | SF Pro Text | Regular | 13–14px | -apple-system, system-ui, sans-serif |
+| Code | SF Mono | Regular | 14–16px | ui-monospace, 'Cascadia Code', monospace |
 
-> [!NOTE]
-> SF Pro is available via Apple's CDN for web use. For non-Apple platforms, fall back to the system font stack.
+**Tracking:** Headlines at -0.01em. Body at default. Never track body copy wider than default — it breaks reading rhythm.
 
-### Logo Concept
+### Iconography
 
-The app icon is already well-defined: a squircle with the SF Symbol grid/checkmark glyph. For marketing, extend this with:
+- **SF Symbols only.** No custom icon set, no raster icons, no icon fonts.
+- **Monochrome default.** Color only when it conveys state (green = active, blue = interactive).
+- **16x16 in menus.** 20x20 in feature cards on the website. Always set `accessibilityDescription`.
+- **Weight: medium.** Matches SF Pro Text regular in optical weight.
 
-- **Wordmark**: "Browser Switch" in SF Pro Display Semibold, tracked slightly loose
-- **Icon + Wordmark lockup**: Icon left, wordmark right, vertically centered
-- **Favicon**: The squircle icon at 32x32 and 16x16
-- **Social preview**: 1200x630 card with the icon, tagline, and a macOS-style blurred background
+### The Flow Branch Mark
+
+The app icon is a custom-drawn flow branch glyph inside a squircle:
+
+```
+                         ○   ← outlined (other browser)
+                      ╱
+             ╱‾‾‾‾‾‾
+   ● ═══════════════ ●      ← bold, filled (selected browser)
+             ╲______
+                      ╲
+                         ○   ← outlined (other browser)
+```
+
+**Properties:**
+- 512x512 squircle, corner radius 96
+- `windowBackgroundColor` background (adapts to light/dark)
+- `labelColor` for all glyph elements (adapts to light/dark)
+- Source node (left): filled circle, r=14
+- Selected destination (center-right): filled circle, r=18, connected by bold 7.5pt line
+- Other destinations (top/bottom-right): outlined circles, r=13, connected by 5.5pt bezier curves at 40% opacity
+- S-curves use cubic beziers with matched control points for smooth flow
+
+**Lockup options:**
+
+```
+[Icon]  Browser Flow                   ← Horizontal lockup (primary)
+
+        [Icon]
+    Browser Flow                       ← Stacked lockup (social, favicon)
+```
+
+**Wordmark:** "Browser Flow" in SF Pro Display Semibold, tracked at -0.01em. "Browser" in Ink, "Flow" in Accent (Stream blue) — the only place the name gets color treatment.
+
+### Photography & Imagery Style
+
+No stock photography. The brand is purely typographic and diagrammatic.
+
+- **Screenshots:** Always framed in macOS window chrome. Light and dark variants.
+- **Diagrams:** Use the flow-branch visual language. Lines that branch and converge. Dots as nodes.
+- **Backgrounds:** Subtle mesh gradients inspired by macOS wallpapers — never flat color, never busy.
+- **Motion:** If animated, use ease-in-out curves. No bouncing, no spring physics. Smooth like flow.
 
 ---
 
@@ -68,20 +199,23 @@ The app icon is already well-defined: a squircle with the SF Symbol grid/checkma
 
 ### Primary: Mac developers and power users
 
-- Use 2-4 browsers daily (Safari for personal, Chrome for dev tools, Firefox for testing, Arc for focused work)
+- Use 2–4 browsers daily (Safari for personal, Chrome for dev tools, Firefox for testing, Arc for focused work)
 - Comfortable with the terminal but appreciate good GUI tools
 - Value tools that respect system conventions and feel native
 - Annoyed by the System Settings detour to switch defaults
+- **Where they are:** Hacker News, r/macapps, Mastodon (#macdev), Mac newsletters, GitHub trending
 
 ### Secondary: Presenters and screen-sharers
 
 - Need to quickly hide desktop icons, toggle Stage Manager, keep the screen awake
 - The Option-key power tools are a strong differentiator for this group
+- **Where they are:** r/macOS, YouTube (productivity channels), Product Hunt
 
 ### Tertiary: QA and testing professionals
 
 - Switch between browsers constantly for cross-browser testing
 - Need the checkmark indicator to confirm which browser is currently default
+- **Where they are:** r/webdev, r/QualityAssurance, testing-focused Slack communities
 
 ---
 
@@ -89,15 +223,15 @@ The app icon is already well-defined: a squircle with the SF Symbol grid/checkma
 
 ### Phase 1 — Foundation (Pre-Launch / v1.0)
 
-**Goal:** Establish presence and build a small, loyal user base before any promotion push.
+**Goal:** Establish presence and build credibility before any promotion.
 
 | Action | Channel | Details |
 | --- | --- | --- |
-| Polish the GitHub README | GitHub | The README *is* the landing page for developers. It already has a screenshot, install command, and feature list — good. Add a hero GIF showing a browser switch in action. |
-| Ship a landing page | Web | Single-page site (see Website section below). |
-| Write a "Why I built this" post | Personal blog / Dev.to | Origin story. Relatable frustration. Show the before/after. |
-| Submit to macOS utility directories | Directories | macapps.link, opensourcemac.org, awesome-macos on GitHub. |
-| Create a Homebrew cask | Homebrew | `brew install --cask browser-switch` is the gold standard for Mac developer distribution. |
+| Polish the GitHub README | GitHub | The README is the real landing page. Add a hero GIF showing a browser change in action. |
+| Ship the landing page | Web | Single-page site at `browserflow.app` (see Website section). |
+| Write the origin story | Dev.to / blog | "Why I built Browser Flow" — relatable frustration, simple solution. |
+| Submit to directories | Directories | macapps.link, opensourcemac.org, awesome-macos on GitHub. |
+| Create a Homebrew cask | Homebrew | `brew install --cask browser-flow` — the developer's expected install path. |
 
 ### Phase 2 — Launch (v1.0 Release)
 
@@ -105,82 +239,85 @@ The app icon is already well-defined: a squircle with the SF Symbol grid/checkma
 
 | Action | Channel | Details |
 | --- | --- | --- |
-| Hacker News "Show HN" post | HN | Title: "Show HN: Browser Switch — change your default macOS browser from the menu bar". Keep the post factual. HN rewards simplicity. |
-| Reddit posts | r/macapps, r/macOS, r/webdev | Short post with GIF, link to site, and the one-liner install. |
-| Product Hunt launch | PH | Schedule for a Tuesday. Prepare 5 screenshots, a 30s demo GIF, and a maker comment explaining the motivation. |
-| Twitter/X thread | Social | "I switch between 4 browsers every day. macOS makes this annoying. So I built a menu bar app." Thread format with GIF. |
-| Mastodon / Bluesky crosspost | Social | The indie Mac dev community is very active on Mastodon. Tag #macdev, #swiftlang. |
+| Show HN | Hacker News | "Show HN: Browser Flow — change your default macOS browser from the menu bar." Factual, short. |
+| Reddit posts | r/macapps, r/macOS, r/webdev | Short post with GIF, link to site, one-liner install. |
+| Product Hunt launch | Product Hunt | Tuesday launch. 5 screenshots, 30s GIF, maker comment with the origin story. |
+| Social threads | X, Mastodon, Bluesky | "I switch between 4 browsers every day. macOS makes this annoying. So I built a menu bar app." Thread with GIF. |
+| Indie Mac community | Mastodon | Tag #macdev, #swiftlang, #indiedev. The Mac indie dev scene is strong here. |
 
 ### Phase 3 — Growth (Post-Launch)
 
-**Goal:** Sustain organic discovery and expand the audience.
+**Goal:** Sustain organic discovery.
 
 | Action | Channel | Details |
 | --- | --- | --- |
-| SEO content | Blog / Website | Target keywords: "change default browser mac", "switch default browser macos", "mac menu bar browser switcher". Write short how-to articles. |
-| Changelog updates | GitHub Releases + Website | Every release gets a short changelog entry on the site. Keep users engaged. |
-| Sponsor/feature in Mac newsletters | Newsletters | Reach out to: Mac Power Users, Club MacStories, iOS Dev Weekly (has a macOS section), Swift Weekly Brief. |
-| YouTube demo | YouTube | 60-90 second screencast. No intro animation, no subscribe begging. Just show the product. |
-| GitHub Sponsors | GitHub | Add a Sponsor button. Some users want to support good open-source tools. |
+| SEO articles | Blog / Website | "How to change default browser on Mac" — target the search query directly. |
+| Mac newsletters | Email outreach | Mac Power Users, Club MacStories, iOS Dev Weekly, Swift Weekly Brief. |
+| YouTube demo | YouTube | 60–90 second screencast. No intro, no subscribe prompt. Just the product. |
+| Changelog updates | GitHub + Site | Every release gets a changelog entry. Keep the community engaged. |
+| GitHub Sponsors | GitHub | Add a Sponsor button. Let people support the work. |
 
 ---
 
 ## Website Plan
 
-### Structure
-
-A single-page marketing site. No blog initially — use Dev.to or a personal blog. The site should load fast, look native to macOS, and convert visitors to installers.
-
 ### URL
 
-`browserswitch.app` or `browserswitchapp.com` (check availability)
+`browserflow.app` (preferred) or `getbrowserflow.com`
 
-### Page Sections (Top to Bottom)
+### Structure
+
+Single-page marketing site. Fast, native-feeling, converts visitors to installers.
+
+### Page Sections
 
 #### 1. Hero
 
 ```
-[App Icon]                    Browser Switch
-                              Switch browsers. Not workflows.
+[Flow Branch Icon]
 
-                              A macOS menu bar utility that changes your
-                              default browser in one click.
+Browser Flow
+URLs flow to the right browser.
 
-                              [ Download for Mac ]    [ View on GitHub ]
+A macOS menu bar utility that changes your default
+browser in one click. Free and open source.
+
+  [ Download for Mac ]    [ View on GitHub ]
+
+Requires macOS 14 (Sonoma) or later.
 ```
 
-- Full-width, centered layout
-- Subtle macOS-style mesh gradient background (like apple.com hero sections)
-- The Download button links to the latest GitHub Release `.zip`
-- "View on GitHub" is a secondary outline button
-- Below the buttons: "Requires macOS 14 (Sonoma) or later. Free and open source."
+- Centered layout, generous whitespace
+- Subtle animated mesh gradient background (CSS only, no JS)
+- Download links to latest GitHub Release `.zip`
+- "View on GitHub" as secondary outline button
 
 #### 2. Demo
 
-- A single looping GIF or short `<video>` (muted, autoplay) showing:
-  1. Click the menu bar icon
-  2. See the browser list with the checkmark
+- Looping `<video>` (muted, autoplay, no controls) showing the full flow:
+  1. Click menu bar icon
+  2. See browser list with checkmark
   3. Click a different browser
   4. Checkmark moves — done
-- Framed inside a macOS window chrome mockup for polish
-- Caption: "One click. New default. No System Settings required."
+- Framed in macOS menu bar chrome mockup
+- Caption: "One click. New default."
 
-#### 3. Features Grid
+#### 3. Features
 
-A 2x3 or 3x2 card grid. Each card has an SF Symbol (rendered as SVG or image), a title, and one sentence.
+2x3 card grid. Each card: SF Symbol icon, title, one sentence.
 
-| Icon | Title | Description |
+| Icon | Title | Copy |
 | --- | --- | --- |
 | `checkmark.circle` | One-Click Switching | Change your default browser without opening System Settings. |
-| `magnifyingglass` | Auto-Discovery | Automatically finds every browser on your Mac. No configuration. |
-| `network` | Network Context | See your IP, ISP, and VPN status right in the menu. |
-| `cup.and.saucer` | Caffeine Mode | Keep your display awake during demos and presentations. |
-| `eye.slash` | Hide Desktop Icons | Clean up your desktop before screen sharing with a single toggle. |
-| `option` | Power Tools | Hold Option to reveal advanced controls for Stage Manager and more. |
+| `magnifyingglass` | Auto-Discovery | Finds every browser on your Mac. Zero configuration. |
+| `network` | Network Context | Your IP, ISP, and VPN status — right in the menu. |
+| `cup.and.saucer` | Caffeine Mode | Keep the display awake during demos and presentations. |
+| `eye.slash` | Hide Desktop Icons | Clean desktop before screen sharing, one toggle. |
+| `option` | Power Tools | Hold Option for Stage Manager controls and more. |
 
-#### 4. Installation
+#### 4. Install
 
-Three tabs or cards:
+Three-tab switcher:
 
 **One-Liner (Recommended)**
 ```bash
@@ -188,18 +325,16 @@ curl -fsSL https://raw.githubusercontent.com/adamabernathy/default-browser/main/
 ```
 
 **Download**
-Direct link to the latest signed `.zip` from GitHub Releases.
+Direct `.zip` from GitHub Releases.
 
 **Homebrew** *(coming soon)*
 ```bash
-brew install --cask browser-switch
+brew install --cask browser-flow
 ```
 
-#### 5. Why Browser Switch?
+#### 5. Before & After
 
-A short two-column comparison:
-
-| Without Browser Switch | With Browser Switch |
+| Without Browser Flow | With Browser Flow |
 | --- | --- |
 | Open System Settings | Click the menu bar icon |
 | Navigate to Desktop & Dock | Pick a browser |
@@ -211,111 +346,102 @@ Caption: "Five steps become one."
 
 #### 6. Open Source
 
-- "Browser Switch is MIT-licensed and open source."
-- Link to GitHub repo
-- "Built with pure AppKit. Zero dependencies. Signed and notarized."
-- GitHub stars badge, build status badge
+> Browser Flow is MIT-licensed and open source.
+> Built with pure AppKit. Zero dependencies. Signed and notarized.
+
+GitHub stars badge. Build status badge. Link to repo.
 
 #### 7. Footer
 
-- "Made by Adam Abernathy" with link
-- GitHub link
-- MIT License link
+- Made by Adam Abernathy
+- GitHub · MIT License
 - "No tracking. No analytics. No telemetry."
 
-### Design Principles for the Site
-
-1. **macOS-native feel.** Use `-apple-system` fonts, vibrancy-inspired glassmorphism for cards, and subtle shadows that match macOS window chrome.
-2. **Dark mode support.** Use `prefers-color-scheme` media query. Light and dark variants for every section.
-3. **Fast.** Static HTML + CSS. No JavaScript frameworks. Minimal JS only for the install tab switcher and dark mode toggle (if not relying on system preference).
-4. **Mobile-friendly.** Even though the app is Mac-only, people discover it on phones. The site should be responsive.
-5. **Accessible.** Semantic HTML, proper heading hierarchy, alt text on every image, 4.5:1 contrast ratios.
-
-### Tech Stack for the Site
-
-| Layer | Choice | Rationale |
-| --- | --- | --- |
-| Hosting | GitHub Pages | Free, fast, custom domain support, deploys on push |
-| Generator | None (static HTML) or 11ty | Keep it simple. A single `index.html` works. |
-| CSS | Vanilla CSS with custom properties | No build step. CSS variables for dark mode. |
-| Assets | Optimized PNG/WebP + inline SVG | SF Symbol-style icons as SVG for crisp rendering |
-| Analytics | None | "No tracking" is a feature, not a limitation |
-
-### Sample CSS Custom Properties
+### Design System for the Site
 
 ```css
 :root {
-  --color-text: #1D1D1F;
-  --color-text-secondary: #8E8E93;
-  --color-accent: #007AFF;
-  --color-surface: #FAFAFA;
-  --color-card: #FFFFFF;
-  --color-border: rgba(0, 0, 0, 0.06);
+  --color-ink: #1D1D1F;
+  --color-smoke: #86868B;
+  --color-stream: #0071E3;
+  --color-paper: #FBFBFD;
+  --color-pane: #FFFFFF;
+  --color-mist: rgba(0, 0, 0, 0.06);
   --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-  --font-mono: 'SF Mono', ui-monospace, monospace;
+  --font-mono: 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
   --radius: 12px;
+  --transition: 200ms ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-text: #F5F5F7;
-    --color-text-secondary: #8E8E93;
-    --color-accent: #0A84FF;
-    --color-surface: #161617;
-    --color-card: #1C1C1E;
-    --color-border: rgba(255, 255, 255, 0.08);
+    --color-ink: #F5F5F7;
+    --color-smoke: #86868B;
+    --color-stream: #2997FF;
+    --color-paper: #141414;
+    --color-pane: #1C1C1E;
+    --color-mist: rgba(255, 255, 255, 0.08);
   }
 }
 ```
 
+### Site Principles
+
+1. **Feels like macOS.** System fonts, subtle blur, semantic-feeling colors.
+2. **Dark mode native.** `prefers-color-scheme`. No toggle — respect the system.
+3. **Fast.** Static HTML + CSS. No frameworks. Only JS for the install tab switcher.
+4. **Responsive.** Mac-only app, but people discover on phones.
+5. **Accessible.** Semantic HTML, proper headings, alt text, 4.5:1 contrast.
+6. **No tracking.** Practice what you preach.
+
 ---
 
-## Content Calendar (First 30 Days Around Launch)
+## Content Calendar (First 30 Days)
 
 | Day | Action | Channel |
 | --- | --- | --- |
-| -7 | Publish "Why I built Browser Switch" blog post | Dev.to / Personal blog |
-| -3 | Submit to macapps.link and opensourcemac.org | Directories |
+| -7 | Publish "Why I built Browser Flow" | Dev.to / blog |
+| -3 | Submit to macapps.link, opensourcemac.org | Directories |
 | 0 | Ship v1.0. Publish site. Post Show HN. | GitHub, Web, HN |
-| 0 | Post to r/macapps and r/macOS | Reddit |
+| 0 | Post to r/macapps, r/macOS | Reddit |
 | 1 | Launch on Product Hunt | Product Hunt |
-| 1 | Twitter/X thread + Mastodon crosspost | Social |
-| 3 | Respond to all HN/Reddit/PH comments | Community |
-| 7 | Publish YouTube demo video | YouTube |
+| 1 | Social threads (X, Mastodon, Bluesky) | Social |
+| 3 | Respond to all community comments | HN, Reddit, PH |
+| 7 | Publish YouTube demo | YouTube |
 | 14 | Reach out to Mac newsletter editors | Email |
-| 21 | Write SEO article: "How to change default browser on Mac" | Blog / Site |
-| 30 | v1.1 release with changelog post | GitHub, Site, Social |
-
----
-
-## Key Metrics to Track
-
-Since the app has no telemetry (and shouldn't), measure success through:
-
-- **GitHub stars and forks** — primary growth indicator
-- **GitHub Release download counts** — `gh api` can pull these
-- **Install script hits** — raw.githubusercontent.com referrer logs (limited but available)
-- **Website traffic** — if you add privacy-respecting analytics later (e.g., Plausible, Fathom), measure page views and download button clicks
-- **Community mentions** — search Twitter, Reddit, HN for "Browser Switch" periodically
+| 21 | SEO article: "How to change default browser on Mac" | Blog / Site |
+| 30 | v1.1 release with changelog | GitHub, Site, Social |
 
 ---
 
 ## Competitive Landscape
 
-| Tool | Type | Differentiator for Browser Switch |
+| Tool | Type | How Browser Flow is different |
 | --- | --- | --- |
-| System Settings | Built-in | Browser Switch is faster (1 click vs. 5 steps) |
-| Browserosaurus | Open source | Browserosaurus intercepts every link click. Browser Switch changes the *default* — simpler mental model. |
-| Choosy | Paid ($10) | Browser Switch is free and open source. Choosy has rule-based routing — different use case. |
-| Finicky | Open source | Finicky uses a config file for rules. Browser Switch is zero-config. |
+| System Settings | Built-in | 1 click vs. 5 steps |
+| Browserosaurus | Open source | Browserosaurus intercepts every link. Browser Flow changes the *default* — simpler model. |
+| Choosy | Paid ($10) | Browser Flow is free and open source. Choosy does rule-based routing — different use case. |
+| Finicky | Open source | Finicky needs a config file. Browser Flow is zero-config. |
 
-**Browser Switch wins on simplicity.** It does one thing, does it well, and gets out of the way. That's the message.
+**Browser Flow wins on simplicity.** One thing, done well, out of the way.
+
+---
+
+## Key Metrics
+
+No telemetry in the app. Measure success externally:
+
+- **GitHub stars and forks** — growth signal
+- **Release download counts** — `gh api` can pull these
+- **Install script hits** — raw.githubusercontent.com referrer logs
+- **Website traffic** — Plausible or Fathom if privacy-respecting analytics are added later
+- **Community mentions** — periodic search for "Browser Flow" on Twitter, Reddit, HN
 
 ---
 
 ## Summary
 
-The brand is minimal, native, and developer-friendly. The marketing strategy leans into organic developer channels (HN, Reddit, Product Hunt, Mac newsletters) rather than paid acquisition. The website is a single fast page that communicates the value in seconds and gets users to the install command as quickly as possible.
+Browser Flow is a brand built on restraint. The persona is quiet, competent, and generous. The visual identity is monochrome with a single accent color that means "active." The voice is short, direct, and verb-first. The icon — a flow branch — is the brand in one image: one input, multiple paths, one clear choice.
 
-The core message throughout everything: **"Switch browsers. Not workflows."**
+The core message: **"URLs flow to the right browser."**
