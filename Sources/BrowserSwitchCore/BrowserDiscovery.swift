@@ -1,13 +1,19 @@
 import Foundation
 
-struct BrowserCandidateInfo: Equatable {
-    let bundleID: String
-    let appURL: URL
-    let displayName: String
+public struct BrowserCandidateInfo: Equatable {
+    public let bundleID: String
+    public let appURL: URL
+    public let displayName: String
+
+    public init(bundleID: String, appURL: URL, displayName: String) {
+        self.bundleID = bundleID
+        self.appURL = appURL
+        self.displayName = displayName
+    }
 }
 
-enum BrowserDiscovery {
-    static func orderedBundleIDs(
+public enum BrowserDiscovery {
+    public static func orderedBundleIDs(
         preferredOrder: [String],
         candidates: [BrowserCandidateInfo],
         homeDirectory: String = NSHomeDirectory()
@@ -28,7 +34,7 @@ enum BrowserDiscovery {
         return preferred + others
     }
 
-    static func deduplicateByDisplayName(
+    public static func deduplicateByDisplayName(
         _ candidates: [BrowserCandidateInfo],
         homeDirectory: String = NSHomeDirectory()
     ) -> [BrowserCandidateInfo] {
@@ -51,7 +57,7 @@ enum BrowserDiscovery {
         return Array(bestByName.values)
     }
 
-    static func isPreferredInstallLocation(
+    public static func isPreferredInstallLocation(
         _ lhs: URL,
         over rhs: URL,
         homeDirectory: String = NSHomeDirectory()
@@ -63,7 +69,7 @@ enum BrowserDiscovery {
         return lhs.path.localizedCaseInsensitiveCompare(rhs.path) == .orderedAscending
     }
 
-    static func installLocationRank(_ url: URL, homeDirectory: String = NSHomeDirectory()) -> Int {
+    public static func installLocationRank(_ url: URL, homeDirectory: String = NSHomeDirectory()) -> Int {
         let path = url.path
         if path.hasPrefix("/Applications/") { return 0 }
         if path.hasPrefix("\(homeDirectory)/Applications/") { return 1 }

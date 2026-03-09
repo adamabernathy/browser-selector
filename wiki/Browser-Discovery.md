@@ -4,9 +4,9 @@ Browser Switch automatically discovers every browser installed on your Mac. No c
 
 ## How Browsers Are Found
 
-The app queries `NSWorkspace` for all applications registered to handle both `http://` and `https://` URLs. Only apps that handle both schemes are shown. The app's own bundle ID is excluded.
+The app queries `NSWorkspace` for all applications registered to handle both `http://` and `https://` URLs. Only apps that handle both schemes are shown. The app's own bundle ID and the Browser Router helper bundle ID are excluded.
 
-Each candidate is verified to have a resolvable `urlForApplication(withBundleIdentifier:)` -- if macOS cannot locate the app on disk, it is skipped.
+Each candidate is verified to have a resolvable `urlForApplication(withBundleIdentifier:)` — if macOS cannot locate the app on disk, it is skipped.
 
 ## Deduplication
 
@@ -38,4 +38,4 @@ The display name shown in the menu is resolved in order:
 
 ## Rescanning
 
-The browser list is rebuilt every time the menu opens. You can also force a rescan from Settings > Scan for New Browsers, which tears down and reconstructs the entire menu.
+The browser list is rebuilt every time the menu opens. You can also force a rescan from **Scan for New Browsers** in the main menu, which tears down and reconstructs the entire menu.
