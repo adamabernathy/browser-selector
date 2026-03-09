@@ -15,14 +15,19 @@ No `.xcodeproj`. SPM only — Xcode can open the folder directly.
 
 ## Project Layout
 
-| Path                                                     | Purpose                                         |
-| -------------------------------------------------------- | ----------------------------------------------- |
-| `Sources/BrowserSwitchMenuBarApp/main.swift`             | App delegate, menu bar UI, all primary logic    |
-| `Sources/BrowserSwitchMenuBarApp/BrowserDiscovery.swift` | Browser detection, deduplication, ordering      |
-| `Sources/BrowserSwitchMenuBarApp/InternetInfo.swift`     | IP/ISP/location model and JSON decoding         |
-| `Sources/BrowserSwitchMenuBarApp/SystemVPNStatus.swift`  | VPN detection via `scutil` and `netstat`        |
-| `Tests/BrowserSwitchMenuBarAppTests/`                    | Unit tests, one file per source type            |
-| `scripts/`                                               | `build-app.sh`, `bump-version.sh`, `install.sh` |
+| Path                                                             | Purpose                                          |
+| ---------------------------------------------------------------- | ------------------------------------------------ |
+| `Sources/BrowserSwitchCore/BrowserDiscovery.swift`               | Browser detection, deduplication, ordering       |
+| `Sources/BrowserSwitchCore/BrowserRoute.swift`                   | Route model (`Codable`)                          |
+| `Sources/BrowserSwitchCore/BrowserRouterPolicy.swift`            | URL-to-browser matching logic                    |
+| `Sources/BrowserSwitchCore/RouteStore.swift`                     | Route persistence (JSON in Application Support)  |
+| `Sources/BrowserSwitchMenuBarApp/main.swift`                     | App delegate, menu bar UI, all primary logic     |
+| `Sources/BrowserSwitchMenuBarApp/SettingsWindowController.swift` | Settings modal (General + Browser Router tabs)   |
+| `Sources/BrowserSwitchMenuBarApp/InternetInfo.swift`             | IP/ISP/location model and JSON decoding          |
+| `Sources/BrowserSwitchMenuBarApp/SystemVPNStatus.swift`          | VPN detection via `scutil` and `netstat`         |
+| `Sources/BrowserSwitchRouter/main.swift`                         | URL routing daemon (Apple Event handler)         |
+| `Tests/BrowserSwitchMenuBarAppTests/`                            | Unit tests, one file per source type             |
+| `scripts/`                                                       | `build-app.sh`, `bump-version.sh`, `install.sh`  |
 
 ## Architecture
 
@@ -30,7 +35,7 @@ The app is intentionally compact. `main.swift` owns the app delegate, menu const
 
 - **Drawing**: All custom images use `NSImage(size:flipped:drawingHandler:)` — never `lockFocus`/`unlockFocus`. Only semantic `NSColor` (`.labelColor`, `.windowBackgroundColor`, `.systemGreen`), never hardcoded RGB. The app observes `NSApp.effectiveAppearance` via KVO to rebuild cached images on theme change.
 - **Status item**: Menu bar icon is an SF Symbol with `.isTemplate = true`. macOS handles light/dark inversion. Never apply custom colors to the status item image.
-- **Menu**: `rebuildMenu(_:)` reconstructs all items on each open. `.state = .on` marks the current default browser. Info items are disabled. Power tools hide unless Option is held, tracked via a 50ms poll timer on `.eventTracking` run loop mode.
+- **Menu**: `rebuildMenu(_:)` reconstructs all items on each open. `.state = .on` marks the current default browser and active toggles (Browser Router, Caffeine). Section headers are disabled `NSMenuItem`s with `attributedTitle` (small semibold `secondaryLabelColor`). Info items are disabled. Power tools hide unless Option is held, tracked via a 50ms poll timer on `.eventTracking` run loop mode.
 - **Concurrency**: Network and shell calls run on background queues. All UI updates go through `DispatchQueue.main.async`. Requests are guarded by in-flight flags and throttled by refresh intervals.
 
 ## Apple HIG

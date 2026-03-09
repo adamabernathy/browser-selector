@@ -22,10 +22,13 @@ Click **Browser Router** at the top of the menu. When active, the item shows a c
 
 URL Bundles are pre-configured sets of routes. They can be toggled on or off as a group in **Settings... → Browser Router** but cannot be deleted.
 
-| Bundle | Routes to | Patterns |
-| --- | --- | --- |
-| Google Workspace | Chrome | Docs, Sheets, Slides, Drive, Gmail, Calendar, Meet, Chat, Jamboard, Sites, Keep, Forms, Admin, Workspace, and `.new` shortcuts |
-| Google Gemini | Chrome | `gemini.google.com` |
+Only bundles whose target browser is installed on the current Mac are shown in Settings.
+
+| Bundle | Routes to | Patterns | Default state |
+| --- | --- | --- | --- |
+| Google Workspace | Chrome | Docs, Sheets, Slides, Drive, Gmail, Calendar, Meet, Chat, Jamboard, Sites, Keep, Forms, Admin, Workspace, and `.new` shortcuts | Enabled |
+| Google Gemini | Chrome | `gemini.google.com` | Enabled |
+| ChatGPT | ChatGPT Mac app | `chatgpt.com` | Disabled |
 
 ## Custom Routes
 

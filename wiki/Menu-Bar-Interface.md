@@ -18,26 +18,28 @@ From top to bottom:
 
 3. **Separator**
 
-4. **Caffeine** — prevents the display from sleeping. When active, the icon changes to a steaming cup with a green dot. Uses an `IOPMAssertion` of type `PreventUserIdleDisplaySleep`. The assertion is released on quit or when toggled off.
+4. **Internet Connection Details** — section header (non-clickable).
 
-5. **Toggle Desktop Icons** — shows or hides Finder desktop icons by writing `CreateDesktop` to `com.apple.finder` preferences and restarting Finder.
+5. **Network info** — VPN status, ISP, and location are shown as disabled (non-clickable) menu items. IP address and Tor exit status are hidden by default and revealed by holding Option. See [Network and VPN Context](Network-and-VPN-Context) and [Option-Key Power Tools](Option-Key-Power-Tools).
 
-6. **Separator**
+6. **Toggle Stage Manager** — hidden by default, revealed by holding Option. See [Option-Key Power Tools](Option-Key-Power-Tools).
 
-7. **Network info** — VPN status, ISP, and location are shown as disabled (non-clickable) menu items. IP address and Tor exit status are hidden by default and revealed by holding Option. See [Network and VPN Context](Network-and-VPN-Context) and [Option-Key Power Tools](Option-Key-Power-Tools).
+7. **Separator**
 
-8. **Toggle Stage Manager** — hidden by default, revealed by holding Option. See [Option-Key Power Tools](Option-Key-Power-Tools).
+8. **Helpful Functions** — section header (non-clickable).
 
-9. **Separator**
+9. **Caffeine** — prevents the display from sleeping. When active, shows a checkmark and changes the icon to a steaming cup. Uses an `IOPMAssertion` of type `PreventUserIdleDisplaySleep`. The assertion is released on quit or when toggled off.
 
-10. **Scan for New Browsers** — re-queries macOS for all installed browsers and rebuilds the menu.
+10. **Toggle Desktop Icons** — shows or hides Finder desktop icons by writing `CreateDesktop` to `com.apple.finder` preferences and restarting Finder.
 
-11. **Settings...** (`Cmd+,`) — opens the Settings modal with General and Browser Router tabs. See [Settings](Settings).
+11. **Separator**
 
-12. **Separator**
+12. **Settings...** (`Cmd+,`) — opens the Settings modal with General and Browser Router tabs. See [Settings](Settings).
 
-13. **About** — opens the standard macOS About panel with the app identity icon, version, build number, and copyright.
+13. **Separator**
 
-14. **Separator**
+14. **About** — opens the standard macOS About panel with the app identity icon, version, build number, and copyright.
 
-15. **Quit** (`Cmd+Q`) — terminates the app, releasing any power assertions and cancelling network monitors. If Browser Router is active, the router process is terminated automatically on quit.
+15. **Separator**
+
+16. **Quit** (`Cmd+Q`) — terminates the app, releasing any power assertions and cancelling network monitors. If Browser Router is active, the router process is terminated automatically on quit.

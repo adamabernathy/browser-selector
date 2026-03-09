@@ -27,6 +27,7 @@ cat > "${ROUTER_APP}/Contents/Info.plist" <<PLIST
   <key>CFBundleExecutable</key>   <string>BrowserSwitchRouter</string>
   <key>CFBundleIdentifier</key>   <string>${ROUTER_BUNDLE_ID}</string>
   <key>CFBundleName</key>         <string>BrowserSwitchRouter</string>
+  <key>CFBundleDisplayName</key>  <string>Browser Router</string>
   <key>CFBundlePackageType</key>  <string>APPL</string>
   <key>CFBundleShortVersionString</key> <string>0.0.0-dev</string>
   <key>CFBundleVersion</key>      <string>dev</string>

@@ -125,6 +125,25 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
 
         menu.addItem(.separator())
 
+        menu.addItem(makeSectionHeaderItem("Internet Connection Details"))
+        addInternetInfoItems(to: menu)
+
+        let powerToolsSeparator = NSMenuItem.separator()
+        menu.addItem(powerToolsSeparator)
+        self.powerToolsSeparatorItem = powerToolsSeparator
+
+        let stageManagerToggleItem = NSMenuItem(
+            title: "Toggle Stage Manager",
+            action: #selector(toggleStageManager),
+            keyEquivalent: "")
+        stageManagerToggleItem.target = self
+        menu.addItem(stageManagerToggleItem)
+        self.stageManagerToggleItem = stageManagerToggleItem
+
+        menu.addItem(.separator())
+
+        menu.addItem(makeSectionHeaderItem("Helpful Functions"))
+
         let caffeineItem = NSMenuItem(
             title: "Caffeine",
             action: #selector(toggleCaffeine),
@@ -142,29 +161,6 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         self.desktopIconsToggleItem = desktopIconsToggleItem
 
         menu.addItem(.separator())
-
-        addInternetInfoItems(to: menu)
-
-        let powerToolsSeparator = NSMenuItem.separator()
-        menu.addItem(powerToolsSeparator)
-        self.powerToolsSeparatorItem = powerToolsSeparator
-
-        let stageManagerToggleItem = NSMenuItem(
-            title: "Toggle Stage Manager",
-            action: #selector(toggleStageManager),
-            keyEquivalent: "")
-        stageManagerToggleItem.target = self
-        menu.addItem(stageManagerToggleItem)
-        self.stageManagerToggleItem = stageManagerToggleItem
-
-        menu.addItem(.separator())
-
-        let scanItem = NSMenuItem(
-            title: "Scan for New Browsers",
-            action: #selector(scanForNewBrowsers),
-            keyEquivalent: "")
-        scanItem.target = self
-        menu.addItem(scanItem)
 
         let settingsItem = NSMenuItem(
             title: "Settings...",
@@ -189,6 +185,18 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         refreshCaffeineState()
         refreshPowerToolsState()
         applyPowerToolsVisibility()
+    }
+
+    private func makeSectionHeaderItem(_ title: String) -> NSMenuItem {
+        let item = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+        item.isEnabled = false
+        item.attributedTitle = NSAttributedString(
+            string: title,
+            attributes: [
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize, weight: .semibold),
+                .foregroundColor: NSColor.secondaryLabelColor,
+            ])
+        return item
     }
 
     // MARK: NSMenuDelegate
@@ -374,7 +382,7 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
         NSApp.terminate(nil)
     }
 
-    @objc private func scanForNewBrowsers() {
+    @objc func scanForNewBrowsers() {
         guard let menu = statusItem.menu else { return }
         rebuildMenu(menu)
     }
@@ -450,38 +458,12 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
 
     private func refreshCaffeineState() {
         guard let item = caffeineMenuItem else { return }
-        if caffeineEnabled {
-            item.image = caffeineOnImage()
-        } else {
-            let image = NSImage(systemSymbolName: "cup.and.saucer.fill", accessibilityDescription: "Caffeine Off")
-            image?.size = NSSize(width: 16, height: 16)
-            item.image = image
-        }
-    }
-
-    private func caffeineOnImage() -> NSImage? {
-        guard let cupImage = NSImage(
-            systemSymbolName: "cup.and.heat.waves.fill",
-            accessibilityDescription: "Caffeine On") else { return nil }
-
-        let cupSize = NSSize(width: 16, height: 16)
-        let dotDiameter: CGFloat = 6
-        let padding: CGFloat = 1
-        let totalWidth = dotDiameter + padding + cupSize.width
-        let compositeSize = NSSize(width: totalWidth, height: cupSize.height)
-
-        return NSImage(size: compositeSize, flipped: false) { _ in
-            NSColor.systemGreen.setFill()
-            NSBezierPath(ovalIn: NSRect(
-                x: 0,
-                y: (cupSize.height - dotDiameter) / 2,
-                width: dotDiameter,
-                height: dotDiameter)).fill()
-            cupImage.draw(
-                in: NSRect(x: dotDiameter + padding, y: 0, width: cupSize.width, height: cupSize.height),
-                from: .zero, operation: .sourceOver, fraction: 1.0)
-            return true
-        }
+        item.state = caffeineEnabled ? .on : .off
+        let symbolName = caffeineEnabled ? "cup.and.heat.waves.fill" : "cup.and.saucer.fill"
+        let description = caffeineEnabled ? "Caffeine On" : "Caffeine Off"
+        let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: description)
+        image?.size = NSSize(width: 16, height: 16)
+        item.image = image
     }
 
     // MARK: - State refresh

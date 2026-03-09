@@ -57,7 +57,7 @@ final class GeneralSettingsViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        preferredContentSize = NSSize(width: 520, height: 80)
+        preferredContentSize = NSSize(width: 520, height: 110)
 
         startupCheckbox = NSButton(
             checkboxWithTitle: "Launch Browser Switch at Login",
@@ -66,9 +66,19 @@ final class GeneralSettingsViewController: NSViewController {
         startupCheckbox.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(startupCheckbox)
 
+        let scanButton = NSButton(
+            title: "Scan for New Browsers",
+            target: self,
+            action: #selector(scanForNewBrowsers))
+        scanButton.bezelStyle = .rounded
+        scanButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scanButton)
+
         NSLayoutConstraint.activate([
             startupCheckbox.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            startupCheckbox.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            startupCheckbox.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            scanButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            scanButton.topAnchor.constraint(equalTo: startupCheckbox.bottomAnchor, constant: 12),
         ])
 
         refreshStartupState()
@@ -81,6 +91,10 @@ final class GeneralSettingsViewController: NSViewController {
 
     private func refreshStartupState() {
         startupCheckbox?.state = SMAppService.mainApp.status == .enabled ? .on : .off
+    }
+
+    @objc private func scanForNewBrowsers() {
+        (NSApp.delegate as? BrowserSwitchMenuBarApp)?.scanForNewBrowsers()
     }
 
     @objc private func toggleStartup(_ sender: NSButton) {
@@ -157,6 +171,8 @@ final class RouterSettingsViewController: NSViewController {
 
         var lastTopAnchor: NSLayoutYAxisAnchor = bundlesHeader.bottomAnchor
         for group in groups {
+            let targetBundleID = group.routes.first?.browserBundleID ?? ""
+            guard NSWorkspace.shared.urlForApplication(withBundleIdentifier: targetBundleID) != nil else { continue }
             let enabled = group.routes.allSatisfy(\.isEnabled)
             let targetName = availableBrowsers.first(where: {
                 $0.bundleID == group.routes.first?.browserBundleID

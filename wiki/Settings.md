@@ -21,6 +21,10 @@ If registration or unregistration fails, an alert is shown with the error messag
 
 After enabling, verify the entry in **System Settings → General → Login Items**.
 
+### Scan for New Browsers
+
+Re-queries macOS for all installed browsers and rebuilds the menu bar browser list. Useful after installing or removing a browser without restarting the app.
+
 ## Browser Router
 
 See [Browser Router](Browser-Router) for a full description of the feature.
@@ -29,10 +33,13 @@ See [Browser Router](Browser-Router) for a full description of the feature.
 
 Pre-configured groups of domain routes. Each bundle is shown with a checkbox — uncheck a bundle to disable all of its routes at once. Bundles cannot be deleted, only disabled.
 
+Only bundles whose target browser is currently installed appear in this list.
+
 Currently available bundles:
 
 - **Google Workspace** — routes Docs, Sheets, Slides, Drive, Gmail, Calendar, Meet, Chat, and other Workspace domains to Chrome
 - **Google Gemini** — routes `gemini.google.com` to Chrome
+- **ChatGPT** — routes `chatgpt.com` to the ChatGPT Mac app (`com.openai.chat`). Disabled by default; only shown if the app is installed.
 
 ### Custom Routes
 
@@ -52,6 +59,3 @@ A table of user-defined rules. Each row maps a domain pattern to a browser.
 
 Routes are stored in `~/Library/Application Support/BrowserSwitch/routes.json`.
 
-## Scan for New Browsers
-
-**Scan for New Browsers** is available directly in the main menu (not in the Settings modal). It triggers a full rebuild of the menu, re-querying macOS for all installed browsers. Useful after installing or removing a browser without restarting the app.

@@ -25,10 +25,22 @@ public final class RouteStore {
            let data = try? Data(contentsOf: fileURL),
            let decoded = try? JSONDecoder().decode([BrowserRoute].self, from: data) {
             routes = decoded
+            seedMissingBuiltIns()
         } else {
             routes = RouteStore.defaultRoutes
             save()
         }
+    }
+
+    private func seedMissingBuiltIns() {
+        let existingGroups = Set(routes.compactMap(\.bundleGroupName))
+        let toAdd = RouteStore.defaultRoutes.filter { route in
+            guard let group = route.bundleGroupName else { return false }
+            return !existingGroups.contains(group)
+        }
+        guard !toAdd.isEmpty else { return }
+        routes.append(contentsOf: toAdd)
+        save()
     }
 
     @discardableResult
@@ -91,9 +103,11 @@ public final class RouteStore {
 extension RouteStore {
     public static let googleWorkspaceBundleGroupName = "Google Workspace"
     public static let geminiBundleGroupName = "Google Gemini"
+    public static let chatGPTBundleGroupName = "ChatGPT"
     public static let chromeBundleID = "com.google.Chrome"
+    public static let chatGPTBundleID = "com.openai.chat"
 
-    public static let defaultRoutes: [BrowserRoute] = googleWorkspaceRoutes + geminiRoutes
+    public static let defaultRoutes: [BrowserRoute] = googleWorkspaceRoutes + geminiRoutes + chatGPTRoutes
 
     private static let googleWorkspaceHosts = [
         "docs.google.com",
@@ -131,6 +145,16 @@ extension RouteStore {
             browserBundleID: chromeBundleID,
             isBuiltIn: true,
             bundleGroupName: geminiBundleGroupName
+        )
+    ]
+
+    public static let chatGPTRoutes: [BrowserRoute] = [
+        BrowserRoute(
+            pattern: "chatgpt.com",
+            browserBundleID: chatGPTBundleID,
+            isBuiltIn: true,
+            bundleGroupName: chatGPTBundleGroupName,
+            isEnabled: false
         )
     ]
 }

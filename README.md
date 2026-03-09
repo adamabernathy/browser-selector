@@ -14,8 +14,8 @@ If you bounce between Safari, Chrome, Firefox, Arc, Edge, or a test browser duri
 - Active macOS menu bar app for daily use
 - Core browser switching working (`http` and `https`)
 - Browser Router: rule-based URL routing to any installed browser
-- Built-in Google Workspace + Gemini bundle routes to Chrome automatically
-- Settings modal with General and Browser Router tabs
+- Built-in Google Workspace, Gemini, and ChatGPT bundle routes
+- Settings modal with General (including Scan for New Browsers) and Browser Router tabs
 - Built as a native AppKit app (no SwiftUI)
 - CI, tests, and release packaging workflows are in the repo
 
@@ -92,9 +92,10 @@ Enable it from the menu bar (click **Browser Router**). When active, all links r
 - URLs matching a rule go to the configured browser
 - Everything else goes to your chosen fallback browser
 
-**Built-in URL bundles** (pre-configured, toggleable):
+**Built-in URL bundles** (pre-configured, toggleable; only shown in Settings if the target app is installed):
 - Google Workspace (Docs, Sheets, Slides, Drive, Gmail, Calendar, Meet, Chat, and more) → Chrome
 - Google Gemini → Chrome
+- ChatGPT (`chatgpt.com`) → ChatGPT Mac app (disabled by default)
 
 **Custom routes** support:
 - Exact host: `work.com`

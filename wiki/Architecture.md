@@ -43,7 +43,7 @@ Makefile                               -- build, test, run, release, install, cl
 A library target shared by the main app and the router daemon. Contains no AppKit or UI code.
 
 - **`BrowserRoute`** — `Codable` struct representing a single routing rule (pattern, target browser, group membership, enabled state).
-- **`RouteStore`** — reads and writes `routes.json` in `~/Library/Application Support/BrowserSwitch/`. Pre-seeds with the Google Workspace and Gemini bundles on first run. Both the main app and the router call `reload()` to pick up changes written by the other process.
+- **`RouteStore`** — reads and writes `routes.json` in `~/Library/Application Support/BrowserSwitch/`. Pre-seeds with the Google Workspace, Gemini, and ChatGPT bundles on first run. On subsequent launches, `seedMissingBuiltIns()` adds any bundle groups absent from an existing file, so new built-in bundles are picked up automatically. Both the main app and the router call `reload()` to pick up changes written by the other process.
 - **`BrowserRouterPolicy`** — stateless matching logic. Given a URL and a route array, returns the target browser bundle ID or `nil` (use fallback). Supports exact host, wildcard (`*.work.com`), and path-prefix (`work.com/path`) patterns.
 - **`BrowserDiscovery`** — deduplication and ordering of discovered browser candidates.
 
@@ -52,7 +52,7 @@ A library target shared by the main app and the router daemon. Contains no AppKi
 The menu bar UI process. Depends on `BrowserSwitchCore`.
 
 - **`main.swift`** — app delegate, menu construction, browser switching, Caffeine, network monitoring, Browser Router enable/disable, debug logging.
-- **`SettingsWindowController`** — `NSWindowController` with an `NSTabViewController` (toolbar style). General tab: Run on Startup. Browser Router tab: bundle group toggles + custom routes `NSTableView`.
+- **`SettingsWindowController`** — `NSWindowController` with an `NSTabViewController` (toolbar style). General tab: Run on Startup + Scan for New Browsers. Browser Router tab: bundle group toggles (filtered to installed browsers) + custom routes `NSTableView`.
 - **`InternetInfo`** / **`SystemVPNStatus`** — network context shown in the menu.
 
 ### BrowserSwitchRouter
