@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Toast — Change your default Mac browser in one click</title>
+  <meta name="description" content="A macOS menu bar utility that changes your default browser in one click. Free and open source.">
+  <meta name="theme-color" content="#E85D2A" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#FF7A45" media="(prefers-color-scheme: dark)">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Design tokens ── */
+    :root {
+      --color-ink: #1D1D1F;
+      --color-smoke: #86868B;
+      --color-crisp: #E85D2A;
+      --color-paper: #FBFBFD;
+      --color-pane: #FFFFFF;
+      --color-mist: rgba(0, 0, 0, 0.06);
+      --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      --font-mono: 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --max-width: 720px;
+      --transition: 200ms ease-in-out;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-ink: #F5F5F7;
+        --color-smoke: #86868B;
+        --color-crisp: #FF7A45;
+        --color-paper: #141414;
+        --color-pane: #1C1C1E;
+        --color-mist: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    /* ── Base ── */
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-ink);
+      background-color: var(--color-paper);
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* ── Typography ── */
+    .display {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .headline {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .body-lg {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .caption {
+      font-size: 13px;
+      color: var(--color-smoke);
+    }
+
+    .text-smoke { color: var(--color-smoke); }
+    .text-crisp { color: var(--color-crisp); }
+    .text-center { text-align: center; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 120px 0 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140%;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(232, 93, 42, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .hero::before {
+        background: radial-gradient(ellipse at 50% 0%, rgba(255, 122, 69, 0.06) 0%, transparent 70%);
+      }
+    }
+
+    .hero .display {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .hero .tagline {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 400;
+      color: var(--color-smoke);
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .hero .sub-copy {
+      font-size: 17px;
+      color: var(--color-smoke);
+      max-width: 480px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+
+    .hero .caption {
+      margin-top: 16px;
+      position: relative;
+    }
+
+    /* ── Buttons ── */
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 980px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity var(--transition), transform var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+
+    .btn-primary {
+      background-color: var(--color-crisp);
+      color: #FFFFFF;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1.5px solid var(--color-mist);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .btn-outline {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+    }
+
+    /* ── Demo ── */
+    .demo {
+      padding: 0 0 80px;
+      text-align: center;
+    }
+
+    .demo-frame {
+      max-width: 480px;
+      margin: 0 auto 16px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .demo-frame {
+        box-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.2),
+          0 12px 40px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .demo-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      background: var(--color-pane);
+      border: 1px solid var(--color-mist);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--color-smoke);
+      line-height: 1.5;
+    }
+
+    /* ── Install ── */
+    .install-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--color-mist);
+      margin-bottom: 20px;
+    }
+
+    .install-tab {
+      padding: 10px 20px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-smoke);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    .install-tab[aria-selected="true"] {
+      color: var(--color-crisp);
+      border-bottom-color: var(--color-crisp);
+    }
+
+    .install-panel {
+      display: none;
+    }
+
+    .install-panel[data-active] {
+      display: block;
+    }
+
+    .code-block {
+      background: var(--color-pane);
+      border: 1px solid var(--color-mist);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .install-note {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--color-smoke);
+    }
+
+    /* ── Before & After ── */
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 600px) {
+      .comparison { grid-template-columns: 1fr; }
+    }
+
+    .comparison-col {
+      background: var(--color-pane);
+      border: 1px solid var(--color-mist);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .comparison-col h3 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--color-smoke);
+    }
+
+    .comparison-col.highlight h3 {
+      color: var(--color-crisp);
+    }
+
+    .comparison-col ol {
+      list-style: none;
+      counter-reset: steps;
+      padding: 0;
+    }
+
+    .comparison-col ol li {
+      counter-increment: steps;
+      padding: 6px 0;
+      font-size: 15px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .comparison-col ol li::before {
+      content: counter(steps);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-smoke);
+      min-width: 18px;
+    }
+
+    .comparison-col.highlight ol li.done {
+      font-weight: 600;
+      color: var(--color-crisp);
+    }
+
+    .comparison-caption {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 15px;
+      color: var(--color-smoke);
+    }
+
+    /* ── Open Source ── */
+    .oss-section {
+      text-align: center;
+    }
+
+    .oss-section blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.5vw, 22px);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--color-ink);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      border: none;
+      padding: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--color-mist);
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--color-smoke);
+      margin-bottom: 8px;
+    }
+
+    footer a {
+      color: var(--color-smoke);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--color-ink);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    /* ── Separator ── */
+    .section-sep {
+      border: none;
+      border-top: 1px solid var(--color-mist);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="display">Browser Toast</h1>
+      <p class="tagline">Managing browsers is as simple as making toast.</p>
+      <p class="sub-copy">A macOS menu bar utility that changes your default browser in one click. Free and open source.</p>
+      <div class="btn-group">
+        <a href="https://github.com/adamabernathy/default-browser/releases/latest" class="btn btn-primary">Download for Mac</a>
+        <a href="https://github.com/adamabernathy/default-browser" class="btn btn-outline">View on GitHub</a>
+      </div>
+      <p class="caption">Requires macOS 14 (Sonoma) or later.</p>
+    </div>
+  </section>
+
+  <!-- ── Demo ── -->
+  <section class="demo">
+    <div class="container">
+      <div class="demo-frame">
+        <img src="../images/screenshot-1.png" alt="Browser Toast menu showing a list of installed browsers with a checkmark next to the current default" width="960" height="640">
+      </div>
+      <p class="caption">One click. Perfectly toasted.</p>
+    </div>
+  </section>
+
+  <hr class="section-sep">
+
+  <!-- ── Features ── -->
+  <section>
+    <div class="container">
+      <h2 class="headline text-center">Everything you need, nothing you don't.</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x2713;</span>
+          <h3>One-Click Switching</h3>
+          <p>Change your default browser without opening System Settings.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x1F50D;</span>
+          <h3>Auto-Discovery</h3>
+          <p>Finds every browser on your Mac. Zero configuration.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x1F310;</span>
+          <h3>Network Context</h3>
+          <p>Your IP, ISP, and VPN status — right in the menu.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x2615;</span>
+          <h3>Caffeine Mode</h3>
+          <p>Keep the display awake during demos and presentations.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x1F648;</span>
+          <h3>Hide Desktop Icons</h3>
+          <p>Clean desktop before screen sharing, one toggle.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&#x2325;</span>
+          <h3>Power Tools</h3>
+          <p>Hold Option for Stage Manager controls and more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-sep">
+
+  <!-- ── Install ── -->
+  <section>
+    <div class="container">
+      <h2 class="headline text-center">Install</h2>
+      <div role="tablist" class="install-tabs" aria-label="Installation methods">
+        <button role="tab" class="install-tab" aria-selected="true" aria-controls="panel-script" id="tab-script">One-Liner</button>
+        <button role="tab" class="install-tab" aria-selected="false" aria-controls="panel-download" id="tab-download">Download</button>
+        <button role="tab" class="install-tab" aria-selected="false" aria-controls="panel-brew" id="tab-brew">Homebrew</button>
+      </div>
+      <div role="tabpanel" class="install-panel" id="panel-script" data-active aria-labelledby="tab-script">
+        <div class="code-block">curl -fsSL https://raw.githubusercontent.com/adamabernathy/default-browser/main/scripts/install.sh | bash</div>
+        <p class="install-note">Downloads, builds from source, and installs to <code>/Applications</code>.</p>
+      </div>
+      <div role="tabpanel" class="install-panel" id="panel-download" aria-labelledby="tab-download">
+        <div class="code-block">Download the latest .zip from GitHub Releases and drag to /Applications.</div>
+        <p class="install-note"><a href="https://github.com/adamabernathy/default-browser/releases/latest" style="color: var(--color-crisp); text-decoration: none;">Download latest release &rarr;</a></p>
+      </div>
+      <div role="tabpanel" class="install-panel" id="panel-brew" aria-labelledby="tab-brew">
+        <div class="code-block">brew install --cask browser-toast</div>
+        <p class="install-note">Coming soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-sep">
+
+  <!-- ── Before & After ── -->
+  <section>
+    <div class="container">
+      <h2 class="headline text-center">The old way vs. the toast way.</h2>
+      <div class="comparison">
+        <div class="comparison-col">
+          <h3>Without Browser Toast</h3>
+          <ol>
+            <li>Open System Settings</li>
+            <li>Navigate to Desktop &amp; Dock</li>
+            <li>Scroll to Default web browser</li>
+            <li>Select from dropdown</li>
+            <li>Close System Settings</li>
+          </ol>
+        </div>
+        <div class="comparison-col highlight">
+          <h3>With Browser Toast</h3>
+          <ol>
+            <li>Click the menu bar icon</li>
+            <li>Pick a browser</li>
+            <li class="done">Done</li>
+          </ol>
+        </div>
+      </div>
+      <p class="comparison-caption">Five steps become one.</p>
+    </div>
+  </section>
+
+  <hr class="section-sep">
+
+  <!-- ── Open Source ── -->
+  <section class="oss-section">
+    <div class="container">
+      <blockquote>Browser Toast is MIT-licensed and open source. Built with pure AppKit. Zero dependencies. Signed and notarized.</blockquote>
+      <a href="https://github.com/adamabernathy/default-browser" class="btn btn-outline">View on GitHub</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/adamabernathy/default-browser">GitHub</a>
+        <a href="https://github.com/adamabernathy/default-browser/blob/main/LICENSE">MIT License</a>
+      </div>
+      <p>Made by Adam Abernathy</p>
+      <p>No tracking. No analytics. No telemetry.</p>
+    </div>
+  </footer>
+
+  <!-- ── Tab Switcher ── -->
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.install-tab');
+      var panels = document.querySelectorAll('.install-panel');
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
+          panels.forEach(function (p) { p.removeAttribute('data-active'); });
+
+          tab.setAttribute('aria-selected', 'true');
+          var panel = document.getElementById(tab.getAttribute('aria-controls'));
+          if (panel) panel.setAttribute('data-active', '');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

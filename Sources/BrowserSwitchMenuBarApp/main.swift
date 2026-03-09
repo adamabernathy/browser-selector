@@ -639,95 +639,85 @@ final class BrowserSwitchMenuBarApp: NSObject, NSApplicationDelegate, NSMenuDele
                 xRadius: 96, yRadius: 96
             ).fill()
 
-            // Flow branch: one source node branching to three destinations.
-            // The center branch is the selected/active browser path.
-            let sourceX: CGFloat = 162
-            let sourceY: CGFloat = 256
-            let destX: CGFloat = 352
-            let destTop: CGFloat = 356
-            let destMid: CGFloat = 256
-            let destBot: CGFloat = 156
+            // Toast Pop: a toaster with toast popping up.
+            // Coordinate system is bottom-left origin (flipped: false).
+            let glyph = NSColor.labelColor
 
-            let sourceRadius: CGFloat = 14
-            let selectedRadius: CGFloat = 18
-            let normalRadius: CGFloat = 13
-            let branchStroke: CGFloat = 5.5
-            let selectedStroke: CGFloat = 7.5
-            let bendX: CGFloat = 258  // control-point x for the S-curves
+            // --- Toaster body (outlined rounded rect) ---
+            let bodyW: CGFloat = 220
+            let bodyH: CGFloat = 180
+            let bodyX: CGFloat = (512 - bodyW) / 2
+            let bodyY: CGFloat = 100
+            let bodyRadius: CGFloat = 24
+            let bodyStroke: CGFloat = 10
 
-            // --- Branch lines (draw behind nodes) ---
-
-            // Top branch (unselected)
-            NSColor.labelColor.withAlphaComponent(0.4).setStroke()
-            let topBranch = NSBezierPath()
-            topBranch.lineWidth = branchStroke
-            topBranch.lineCapStyle = .round
-            topBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
-            topBranch.curve(
-                to: NSPoint(x: destX - normalRadius, y: destTop),
-                controlPoint1: NSPoint(x: bendX, y: sourceY),
-                controlPoint2: NSPoint(x: bendX, y: destTop)
+            glyph.setStroke()
+            let body = NSBezierPath(
+                roundedRect: NSRect(x: bodyX, y: bodyY, width: bodyW, height: bodyH),
+                xRadius: bodyRadius, yRadius: bodyRadius
             )
-            topBranch.stroke()
+            body.lineWidth = bodyStroke
+            body.lineJoinStyle = .round
+            body.stroke()
 
-            // Bottom branch (unselected)
-            let botBranch = NSBezierPath()
-            botBranch.lineWidth = branchStroke
-            botBranch.lineCapStyle = .round
-            botBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
-            botBranch.curve(
-                to: NSPoint(x: destX - normalRadius, y: destBot),
-                controlPoint1: NSPoint(x: bendX, y: sourceY),
-                controlPoint2: NSPoint(x: bendX, y: destBot)
-            )
-            botBranch.stroke()
+            // --- Slot (horizontal opening near top of body) ---
+            let slotW: CGFloat = 100
+            let slotH: CGFloat = 14
+            let slotX: CGFloat = (512 - slotW) / 2
+            let slotY: CGFloat = bodyY + bodyH - 44
 
-            // Center branch (selected — bold, full opacity)
-            NSColor.labelColor.setStroke()
-            let midBranch = NSBezierPath()
-            midBranch.lineWidth = selectedStroke
-            midBranch.lineCapStyle = .round
-            midBranch.move(to: NSPoint(x: sourceX + sourceRadius, y: sourceY))
-            midBranch.line(to: NSPoint(x: destX - selectedRadius, y: destMid))
-            midBranch.stroke()
+            glyph.setFill()
+            NSBezierPath(
+                roundedRect: NSRect(x: slotX, y: slotY, width: slotW, height: slotH),
+                xRadius: slotH / 2, yRadius: slotH / 2
+            ).fill()
 
-            // --- Destination nodes ---
-            NSColor.labelColor.setFill()
-            NSColor.labelColor.setStroke()
+            // --- Toast (rounded rect rising above the slot) ---
+            let toastW: CGFloat = 86
+            let toastH: CGFloat = 110
+            let toastX: CGFloat = (512 - toastW) / 2
+            let toastY: CGFloat = slotY + slotH - 16  // overlaps slot slightly
+            let toastRadius: CGFloat = 14
 
-            // Top destination (outlined)
-            let topOval = NSRect(
-                x: destX - normalRadius, y: destTop - normalRadius,
-                width: normalRadius * 2, height: normalRadius * 2
-            )
-            let topDot = NSBezierPath(ovalIn: topOval)
-            topDot.lineWidth = 4
-            topDot.stroke()
+            glyph.withAlphaComponent(0.85).setFill()
+            NSBezierPath(
+                roundedRect: NSRect(x: toastX, y: toastY, width: toastW, height: toastH),
+                xRadius: toastRadius, yRadius: toastRadius
+            ).fill()
 
-            // Bottom destination (outlined)
-            let botOval = NSRect(
-                x: destX - normalRadius, y: destBot - normalRadius,
-                width: normalRadius * 2, height: normalRadius * 2
-            )
-            let botDot = NSBezierPath(ovalIn: botOval)
-            botDot.lineWidth = 4
-            botDot.stroke()
+            // --- Checkmark on toast (indicates "done" / active browser) ---
+            let checkCenterX: CGFloat = 256
+            let checkCenterY: CGFloat = toastY + toastH / 2 + 8
+            let checkStroke: CGFloat = 8
 
-            // Center destination (filled — the selected browser)
+            NSColor.windowBackgroundColor.setStroke()
+            let check = NSBezierPath()
+            check.lineWidth = checkStroke
+            check.lineCapStyle = .round
+            check.lineJoinStyle = .round
+            check.move(to: NSPoint(x: checkCenterX - 16, y: checkCenterY))
+            check.line(to: NSPoint(x: checkCenterX - 4, y: checkCenterY - 14))
+            check.line(to: NSPoint(x: checkCenterX + 18, y: checkCenterY + 14))
+            check.stroke()
+
+            // --- Knobs (two small circles near bottom of body) ---
+            let knobR: CGFloat = 8
+            let knobY: CGFloat = bodyY + 36
+
+            glyph.setFill()
             NSBezierPath(ovalIn: NSRect(
-                x: destX - selectedRadius, y: destMid - selectedRadius,
-                width: selectedRadius * 2, height: selectedRadius * 2
+                x: 256 - 32 - knobR, y: knobY - knobR,
+                width: knobR * 2, height: knobR * 2
             )).fill()
 
-            // --- Source node (filled) ---
             NSBezierPath(ovalIn: NSRect(
-                x: sourceX - sourceRadius, y: sourceY - sourceRadius,
-                width: sourceRadius * 2, height: sourceRadius * 2
+                x: 256 + 32 - knobR, y: knobY - knobR,
+                width: knobR * 2, height: knobR * 2
             )).fill()
 
             return true
         }
-        image.accessibilityDescription = "Browser Switch"
+        image.accessibilityDescription = "Browser Toast"
         return image
     }
 

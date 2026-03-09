@@ -153,28 +153,33 @@ The app itself uses only semantic `NSColor` — no brand colors touch the UI. Th
 - **16x16 in menus.** 20x20 in feature cards on the website. Always set `accessibilityDescription`.
 - **Weight: medium.** Matches SF Pro Text regular in optical weight.
 
-### The Toast Mark
+### The Toast Pop Mark
 
-The app icon is a custom-drawn glyph inside a squircle — a stylized toaster slot with a browser emerging, or alternatively, the existing flow-branch routing mark that represents URLs routing to the right browser:
+The app icon is a custom-drawn glyph inside a squircle — a geometric toaster with a piece of toast popping up, topped with a checkmark that signals "done" / "active browser selected":
 
 ```
-                         o   <-- outlined (other browser)
-                      /
-             /------
-   * =============== *      <-- bold, filled (selected browser)
-             \------
-                      \
-                         o   <-- outlined (other browser)
+             ┌─────┐
+             │  ✓  │   <-- toast popping up (rounded rect, 85% opacity)
+        ┌────┤     ├────┐
+        │    └─────┘    │
+        │   ┌───────┐   │  <-- toaster slot (filled rounded rect)
+        │   └───────┘   │
+        │               │
+        │    ●     ●    │  <-- knobs (filled circles)
+        │               │
+        └───────────────┘  <-- toaster body (outlined rounded rect)
 ```
 
 **Properties:**
 - 512x512 squircle, corner radius 96
 - `windowBackgroundColor` background (adapts to light/dark)
 - `labelColor` for all glyph elements (adapts to light/dark)
-- Source node (left): filled circle, r=14
-- Selected destination (center-right): filled circle, r=18, connected by bold 7.5pt line
-- Other destinations (top/bottom-right): outlined circles, r=13, connected by 5.5pt bezier curves at 40% opacity
-- S-curves use cubic beziers with matched control points for smooth routing
+- Toaster body: 220x180 outlined rounded rect, 10pt stroke, corner radius 24
+- Slot: 100x14 filled rounded rect near top of body
+- Toast: 86x110 filled rounded rect at 85% opacity, rising above slot
+- Checkmark: 8pt stroke in `windowBackgroundColor`, drawn on the toast
+- Knobs: two filled circles (r=8) near bottom of body
+- Drawn programmatically via `NSImage(size:flipped:drawingHandler:)` — no asset files
 
 **Lockup options:**
 
